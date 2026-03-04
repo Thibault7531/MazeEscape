@@ -5,7 +5,7 @@
 int main ()
 {
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
-	InitWindow(1920, 1080, "MazeEscape");
+	InitWindow(1280, 720, "MazeEscape");
 
 	SearchAndSetResourceDir("resources");
 	Texture wabbit = LoadTexture("wabbit_alpha.png");

@@ -408,3 +408,5 @@ Makefile
 /build/compile_commands.json
 
 .idea
+raylib.Make
+MazeEscape.make
