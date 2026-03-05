@@ -12,12 +12,7 @@ int main ()
 	SearchAndSetResourceDir("resources");
 	Texture wabbit = LoadTexture("wabbit_alpha.png");
 
-	Maze maze = createMaze(10);
-	MazeNode* node = getMazeNode(maze, 0, 0);
-	setWallTop(node, true);
-	setWallLeft(node, true);
-	setWallRight(node, true);
-	setWallBottom(node, true);
+	Maze maze = createRandomMaze(10);
 	printMaze(maze);
 	destroyMaze(maze);
 	

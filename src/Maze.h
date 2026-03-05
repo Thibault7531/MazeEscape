@@ -19,10 +19,13 @@ struct Maze
 };
 typedef struct Maze* Maze;
 
-Maze createMaze(int size);
+Maze createEmptyMaze(int size);
+Maze createRandomMaze(int size);
 void destroyMaze(Maze maze);
+
 MazeNode* getMazeNode(Maze maze, int x, int y);
 void setNodeWalls(Maze maze, int x, int y, int node);
+int getMazeSize(Maze maze);
 
 bool isWallTop(MazeNode* node);
 bool isWallLeft(MazeNode* node);

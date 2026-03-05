@@ -3,8 +3,9 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-Maze createMaze(int size)
+Maze createEmptyMaze(int size)
 {
     Maze maze = calloc(1, sizeof(struct Maze));
     maze->size = size;
@@ -14,6 +15,56 @@ Maze createMaze(int size)
         maze->nodes[i] = calloc(1, sizeof(MazeNode));
         maze->nodes[i]->walls = 0;
     }
+    return maze;
+}
+
+Maze createRandomMaze(int size)
+{
+    Maze maze = createEmptyMaze(size);
+
+    srand(time(NULL));
+
+    for(int x=0; x < maze->size; x++){ // on fait les bordures
+        for(int y=0; y < maze->size; y++){
+            MazeNode* node = getMazeNode(maze, x, y);
+
+            if(y==0){
+                setWallTop(node, true);
+            }
+            if(y == maze->size-1){
+                setWallBottom(node, true);
+            }
+            if(x == 0){
+                setWallLeft(node, true);
+            }
+            if(x == maze->size-1){
+                setWallRight(node, true);
+            }
+        }
+    }
+
+    for(int i=0; i < 3; i++){
+        int x = rand() % maze->size;
+        int y = rand() % maze->size;
+        MazeNode* node = getMazeNode(maze, x, y);
+        setWallTop(node, true);
+
+        x = rand() % maze->size;
+        y = rand() % maze->size;
+        node = getMazeNode(maze, x, y);
+        setWallBottom(node, true);
+
+        x = rand() % maze->size;
+        y = rand() % maze->size;
+        node = getMazeNode(maze, x, y);
+        setWallLeft(node, true);
+
+        x = rand() % maze->size;
+        y = rand() % maze->size;
+        node = getMazeNode(maze, x, y);
+        setWallRight(node, true);
+    }
+
     return maze;
 }
 
@@ -40,6 +91,11 @@ void setNodeWalls(Maze maze, int x, int y, int walls)
     assert(x >= 0 && x < maze->size);
     assert(y >= 0 && y < maze->size);
     maze->nodes[x+y*maze->size]->walls = walls;
+}
+
+int getMazeSize(Maze maze)
+{
+    return maze->size;
 }
 
 bool isWallTop(MazeNode* node)
