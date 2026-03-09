@@ -24,6 +24,12 @@ Maze createEmptyMaze(int size);
 Maze createRandomMaze(int size);
 void destroyMaze(Maze maze);
 
+void addBorders(Maze maze);
+void addStartArea(Maze maze);
+void addRandomStartAreaExits(Maze maze);
+void addRandomExit(Maze maze);
+void addRandomWall(Maze maze);
+
 MazeNode getMazeNode(Maze maze, int x, int y);
 void setNodeWalls(Maze maze, int x, int y, int node);
 int getMazeSize(Maze maze);
