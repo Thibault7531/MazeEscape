@@ -28,9 +28,6 @@ int main ()
 	}
 
 	destroyMaze(maze);
-
-	UnloadTexture(wabbit);
-
 	CloseWindow();
 	return 0;
 }
