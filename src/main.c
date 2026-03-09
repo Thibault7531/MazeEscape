@@ -10,9 +10,8 @@ int main ()
 	InitWindow(1280, 720, "MazeEscape");
 
 	SearchAndSetResourceDir("resources");
-	Texture wabbit = LoadTexture("wabbit_alpha.png");
 
-	Maze maze = createRandomMaze(9);
+	Maze maze = createRandomMaze(10);
 	
 	// game loop
 	while (!WindowShouldClose())

@@ -1,6 +1,7 @@
 #include "Maze.h"
 
 #include <assert.h>
+#include <math.h>
 #include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +34,7 @@ Maze createRandomMaze(int size)
     addRandomStartAreaExits(maze);
     addRandomExit(maze);
 
-    for (int i = 0; i < maze->size*4; i++)
+    for (int i = 0; i < pow(maze->size*.65f, 2); i++)
     {
         addRandomWall(maze);
     }
