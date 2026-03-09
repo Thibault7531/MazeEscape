@@ -12,7 +12,7 @@ int main ()
 	SearchAndSetResourceDir("resources");
 	Texture wabbit = LoadTexture("wabbit_alpha.png");
 
-	Maze maze = createRandomMaze(9);
+	Maze maze = createRandomMaze(10);
 	
 	// game loop
 	while (!WindowShouldClose())
