@@ -1,5 +1,7 @@
 #include "lab.h"
 
+#include <stdlib.h>
+
 //création d'un carré vide qu'on va transformer en labyrinthe
 void creer_labyrinthe(Labyrinthe *l){
     //création d'un carré vide

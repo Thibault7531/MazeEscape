@@ -13,8 +13,6 @@ int main ()
 	Texture wabbit = LoadTexture("wabbit_alpha.png");
 
 	Maze maze = createRandomMaze(10);
-	printMaze(maze);
-	destroyMaze(maze);
 	
 	// game loop
 	while (!WindowShouldClose())
@@ -22,12 +20,15 @@ int main ()
 		BeginDrawing();
 
 		ClearBackground(BLACK);
-		DrawText("Hello Raylib", 200,200,20,WHITE);
-		DrawTexture(wabbit, 400, 200, WHITE);
+
 		DrawFPS(10, 10);
+
+		renderMaze(maze);
 
 		EndDrawing();
 	}
+
+	destroyMaze(maze);
 
 	UnloadTexture(wabbit);
 

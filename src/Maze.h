@@ -7,15 +7,16 @@
 #define RIGHTWALL (1<<1)
 #define BOTTOMWALL (1<<0)
 
-typedef struct MazeNode
+struct MazeNode
 {
     unsigned int walls;
-} MazeNode;
+};
+typedef struct MazeNode* MazeNode;
 
 struct Maze
 {
     int size;
-    MazeNode** nodes;
+    MazeNode* nodes;
 };
 typedef struct Maze* Maze;
 
@@ -23,17 +24,18 @@ Maze createEmptyMaze(int size);
 Maze createRandomMaze(int size);
 void destroyMaze(Maze maze);
 
-MazeNode* getMazeNode(Maze maze, int x, int y);
+MazeNode getMazeNode(Maze maze, int x, int y);
 void setNodeWalls(Maze maze, int x, int y, int node);
 int getMazeSize(Maze maze);
 
-bool isWallTop(MazeNode* node);
-bool isWallLeft(MazeNode* node);
-bool isWallRight(MazeNode* node);
-bool isWallBottom(MazeNode* node);
-void setWallTop(MazeNode* node, bool enable);
-void setWallLeft(MazeNode* node, bool enable);
-void setWallRight(MazeNode* node, bool enable);
-void setWallBottom(MazeNode* node, bool enable);
+bool isWallTop(MazeNode node);
+bool isWallLeft(MazeNode node);
+bool isWallRight(MazeNode node);
+bool isWallBottom(MazeNode node);
+void setWallTop(MazeNode node, bool enable);
+void setWallLeft(MazeNode node, bool enable);
+void setWallRight(MazeNode node, bool enable);
+void setWallBottom(MazeNode node, bool enable);
 
 void printMaze(Maze maze);
+void renderMaze(Maze maze);
