@@ -85,11 +85,10 @@ void addStartArea(Maze maze)
     {
         for (int x = 0; x < startAreaSize; x++)
         {
-            MazeNode node = getMazeNode(maze, startAreaX + x, startAreaY + y);
-            if (x == 0) setWallLeft(node, true);
-            if (x == startAreaSize - 1) setWallRight(node, true);
-            if (y == 0) setWallTop(node, true);
-            if (y == startAreaSize - 1) setWallBottom(node, true);
+            if (x == 0) setNodeWall(maze, startAreaX + x, startAreaY + y, true, LEFTWALL);
+            if (x == startAreaSize - 1) setNodeWall(maze, startAreaX + x, startAreaY + y, true, RIGHTWALL);
+            if (y == 0) setNodeWall(maze, startAreaX + x, startAreaY + y, true, TOPWALL);
+            if (y == startAreaSize - 1) setNodeWall(maze, startAreaX + x, startAreaY + y, true, BOTTOMWALL);
         }
     }
 }
@@ -105,34 +104,40 @@ void addRandomStartAreaExits(Maze maze)
     {
     case 0:
         {
-            MazeNode node = getMazeNode(maze, startAreaX + startPos%startAreaSize, startAreaY);
-            setWallTop(node, false);
+            maze->entryPointX = startAreaX + startPos%startAreaSize;
+            maze->entryPointY = startAreaY;
+            maze->entryPointSide = TOPWALL;
             break;
         }
 
     case 1:
         {
-            MazeNode node = getMazeNode(maze, startAreaX + startAreaSize - 1, startAreaY + startPos%startAreaSize);
-            setWallRight(node, false);
+            maze->entryPointX = startAreaX + startAreaSize - 1;
+            maze->entryPointY = startAreaY + startPos%startAreaSize;
+            maze->entryPointSide = RIGHTWALL;
             break;
         }
 
     case 2:
         {
-            MazeNode node = getMazeNode(maze, startAreaX + startAreaSize - startPos%startAreaSize - 1, startAreaY + startAreaSize - 1);
-            setWallBottom(node, false);
+            maze->entryPointX = startAreaX + startAreaSize - startPos%startAreaSize - 1;
+            maze->entryPointY = startAreaY + startAreaSize - 1;
+            maze->entryPointSide = BOTTOMWALL;
             break;
         }
 
     case 3:
         {
-            MazeNode node = getMazeNode(maze, startAreaX, startAreaY + startAreaSize - startPos%startAreaSize - 1);
-            setWallLeft(node, false);
+            maze->entryPointX = startAreaX;
+            maze->entryPointY = startAreaY + startAreaSize - 1 - startPos%startAreaSize;
+            maze->entryPointSide = LEFTWALL;
             break;
         }
 
-    default: break;
+    default: return;
     }
+
+    setNodeWall(maze, maze->entryPointX, maze->entryPointY, false, maze->entryPointSide);
 }
 
 void addRandomExit(Maze maze)
@@ -142,34 +147,39 @@ void addRandomExit(Maze maze)
     {
     case 0:
         {
-            MazeNode node = getMazeNode(maze, endPos%maze->size, 0);
-            setWallTop(node, false);
+            maze->exitPointX = endPos%maze->size;
+            maze->exitPointY = 0;
+            maze->exitPointSide = TOPWALL;
             break;
         }
 
     case 1:
         {
-            MazeNode node = getMazeNode(maze, maze->size - 1, endPos%maze->size);
-            setWallRight(node, false);
+            maze->exitPointX = maze->size - 1;
+            maze->exitPointY = endPos%maze->size;
+            maze->exitPointSide = RIGHTWALL;
             break;
         }
 
     case 2:
         {
-            MazeNode node = getMazeNode(maze, maze->size - 1 - endPos%maze->size, maze->size - 1);
-            setWallBottom(node, false);
+            maze->exitPointX = maze->size - 1 - endPos%maze->size;
+            maze->exitPointY = maze->size - 1;
+            maze->exitPointSide = BOTTOMWALL;
             break;
         }
 
     case 3:
         {
-            MazeNode node = getMazeNode(maze, 0, maze->size - 1 - endPos%maze->size);
-            setWallLeft(node, false);
+            maze->exitPointX = 0;
+            maze->exitPointY = maze->size - 1 - endPos%maze->size;
+            maze->exitPointSide = LEFTWALL;
             break;
         }
 
     default: break;
     }
+    setNodeWall(maze, maze->exitPointX, maze->exitPointY, false, maze->exitPointSide);
 }
 
 void addRandomWall(Maze maze)
@@ -185,49 +195,45 @@ void addRandomWall(Maze maze)
     {
     case 0:
         {
-            while (y == 0 || (x >= startAreaX && x < startAreaX + startAreaSize && y >= startAreaY && y <= startAreaY + startAreaSize) || isWallTop(getMazeNode(maze, x, y)) || isWallBottom(getMazeNode(maze, x, y-1)))
+            while (y == 0 || (x >= startAreaX && x < startAreaX + startAreaSize && y >= startAreaY && y <= startAreaY + startAreaSize) || isWallTop(getMazeNode(maze, x, y)))
             {
                 x = rand() % maze->size;
                 y = rand() % maze->size;
             }
-            MazeNode node = getMazeNode(maze, x, y);
-            setWallTop(node, true);
+            setNodeWall(maze, x, y, true, TOPWALL);
             break;
         }
 
     case 1:
         {
-            while (x == maze->size - 1 || (x >= startAreaX - 1 && x < startAreaX + startAreaSize && y >= startAreaY && y < startAreaY + startAreaSize) || isWallRight(getMazeNode(maze, x, y)) || isWallLeft(getMazeNode(maze, x+1, y)))
+            while (x == maze->size - 1 || (x >= startAreaX - 1 && x < startAreaX + startAreaSize && y >= startAreaY && y < startAreaY + startAreaSize) || isWallRight(getMazeNode(maze, x, y)))
             {
                 x = rand() % maze->size;
                 y = rand() % maze->size;
             }
-            MazeNode node = getMazeNode(maze, x, y);
-            setWallRight(node, true);
+            setNodeWall(maze, x, y, true, RIGHTWALL);
             break;
         }
 
     case 2:
         {
-            while (y == maze->size - 1 || (x >= startAreaX && x < startAreaX + startAreaSize && y >= startAreaY - 1 && y < startAreaY + startAreaSize) || isWallBottom(getMazeNode(maze, x, y)) || isWallTop(getMazeNode(maze, x, y+1)))
+            while (y == maze->size - 1 || (x >= startAreaX && x < startAreaX + startAreaSize && y >= startAreaY - 1 && y < startAreaY + startAreaSize) || isWallBottom(getMazeNode(maze, x, y)))
             {
                 x = rand() % maze->size;
                 y = rand() % maze->size;
             }
-            MazeNode node = getMazeNode(maze, x, y);
-            setWallBottom(node, true);
+            setNodeWall(maze, x, y, true, BOTTOMWALL);
             break;
         }
 
     case 3:
         {
-            while (x == 0 || (x >= startAreaX && x <= startAreaX + startAreaSize && y >= startAreaY && y < startAreaY + startAreaSize) || isWallLeft(getMazeNode(maze, x, y)) || isWallRight(getMazeNode(maze, x-1, y)))
+            while (x == 0 || (x >= startAreaX && x <= startAreaX + startAreaSize && y >= startAreaY && y < startAreaY + startAreaSize) || isWallLeft(getMazeNode(maze, x, y)))
             {
                 x = rand() % maze->size;
                 y = rand() % maze->size;
             }
-            MazeNode node = getMazeNode(maze, x, y);
-            setWallLeft(node, true);
+            setNodeWall(maze, x, y, true, LEFTWALL);
             break;
         }
 
@@ -242,11 +248,83 @@ MazeNode getMazeNode(Maze maze, int x, int y)
     return maze->nodes[x+y*maze->size];
 }
 
-void setNodeWalls(Maze maze, int x, int y, int walls)
+void setNodeWallsUnsafe(Maze maze, int x, int y, int walls)
 {
     assert(x >= 0 && x < maze->size);
     assert(y >= 0 && y < maze->size);
     maze->nodes[x+y*maze->size]->walls = walls;
+}
+
+void setNodeWall(Maze maze, int x, int y, bool enable, int wall)
+{
+    if (enable)
+    {
+        MazeNode node = getMazeNode(maze, x, y);
+        setNodeWallsUnsafe(maze, x, y, node->walls | wall);
+
+        switch (wall)
+        {
+        case TOPWALL:
+            {
+                if (y > 0) setNodeWallsUnsafe(maze, x, y-1, getMazeNode(maze, x, y-1)->walls | BOTTOMWALL);
+                break;
+            }
+
+        case BOTTOMWALL:
+            {
+                if (y < maze->size - 1) setNodeWallsUnsafe(maze, x, y+1, getMazeNode(maze, x, y+1)->walls | TOPWALL);
+                break;
+            }
+
+        case LEFTWALL:
+            {
+                if (x > 0) setNodeWallsUnsafe(maze, x-1, y, getMazeNode(maze, x-1, y)->walls | RIGHTWALL);
+                break;
+            }
+
+        case RIGHTWALL:
+            {
+                if (x < maze->size - 1) setNodeWallsUnsafe(maze, x+1, y, getMazeNode(maze, x+1, y)->walls | LEFTWALL);
+                break;
+            }
+
+        default: assert(false);
+        }
+    }
+    else
+    {
+        MazeNode node = getMazeNode(maze, x, y);
+        setNodeWallsUnsafe(maze, x, y, node->walls & ~wall);
+
+        switch (wall)
+        {
+        case TOPWALL:
+            {
+                if (y > 0) setNodeWallsUnsafe(maze, x, y-1, getMazeNode(maze, x, y-1)->walls & ~BOTTOMWALL);
+                break;
+            }
+
+        case BOTTOMWALL:
+            {
+                if (y < maze->size - 1) setNodeWallsUnsafe(maze, x, y+1, getMazeNode(maze, x, y+1)->walls & ~TOPWALL);
+                break;
+            }
+
+        case LEFTWALL:
+            {
+                if (x > 0) setNodeWallsUnsafe(maze, x-1, y, getMazeNode(maze, x-1, y)->walls & ~RIGHTWALL);
+                break;
+            }
+
+        case RIGHTWALL:
+            {
+                if (x < maze->size - 1) setNodeWallsUnsafe(maze, x+1, y, getMazeNode(maze, x+1, y)->walls & ~LEFTWALL);
+                break;
+            }
+
+        default: assert(false);
+        }
+    }
 }
 
 int getMazeSize(Maze maze)
@@ -365,6 +443,80 @@ void renderMaze(Maze maze)
                 Vector2 lineEnd = {lineStart.x + nodeSize + lineThickness, lineStart.y};
                 DrawLineEx(lineStart, lineEnd, lineThickness, WHITE);
             }
+        }
+    }
+
+    MazeNode startNode = getMazeNode(maze, maze->entryPointX, maze->entryPointY);
+    switch (maze->entryPointSide)
+    {
+    case TOPWALL:
+        {
+            Vector2 lineStart = {startCoord.x + maze->entryPointX * nodeSize, startCoord.y + maze->entryPointY * nodeSize};
+            Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
+            DrawLineEx(lineStart, lineEnd, 5, GREEN);
+            break;
+        }
+
+    case RIGHTWALL:
+        {
+            Vector2 lineStart = {startCoord.x + (maze->entryPointX+1) * nodeSize, startCoord.y + maze->entryPointY * nodeSize};
+            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
+            DrawLineEx(lineStart, lineEnd, 5, GREEN);
+            break;
+        }
+
+    case BOTTOMWALL:
+        {
+            Vector2 lineStart = {startCoord.x + maze->entryPointX * nodeSize, startCoord.y + (maze->entryPointY+1) * nodeSize};
+            Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
+            DrawLineEx(lineStart, lineEnd, 5, GREEN);
+            break;
+        }
+
+    case LEFTWALL:
+        {
+            Vector2 lineStart = {startCoord.x + maze->entryPointX * nodeSize, startCoord.y + maze->entryPointY * nodeSize};
+            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
+            DrawLineEx(lineStart, lineEnd, 5, GREEN);
+            break;
+        }
+
+    default: break;
+    }
+
+    MazeNode exitNode = getMazeNode(maze, maze->exitPointX, maze->exitPointY);
+    switch (maze->exitPointSide)
+    {
+    case TOPWALL:
+        {
+            Vector2 lineStart = {startCoord.x + maze->exitPointX * nodeSize, startCoord.y + maze->exitPointY * nodeSize};
+            Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
+            DrawLineEx(lineStart, lineEnd, 5, RED);
+            break;
+        }
+
+    case RIGHTWALL:
+        {
+            Vector2 lineStart = {startCoord.x + (maze->exitPointX+1) * nodeSize, startCoord.y + maze->exitPointY * nodeSize};
+            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
+            DrawLineEx(lineStart, lineEnd, 5, RED);
+            break;
+        }
+
+    case BOTTOMWALL:
+        {
+            Vector2 lineStart = {startCoord.x + maze->exitPointX * nodeSize, startCoord.y + (maze->exitPointY+1) * nodeSize};
+            Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
+            DrawLineEx(lineStart, lineEnd, 5, RED);
+            break;
+        }
+
+    case LEFTWALL:
+        {
+            Vector2 lineStart = {startCoord.x + maze->exitPointX * nodeSize, startCoord.y + maze->exitPointY * nodeSize};
+            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
+            DrawLineEx(lineStart, lineEnd, 5, RED);
+            break;
         }
     }
 }

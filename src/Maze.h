@@ -17,6 +17,8 @@ struct Maze
 {
     int size;
     MazeNode* nodes;
+    int entryPointX, entryPointY, entryPointSide;
+    int exitPointX, exitPointY, exitPointSide;
 };
 typedef struct Maze* Maze;
 
@@ -31,7 +33,8 @@ void addRandomExit(Maze maze);
 void addRandomWall(Maze maze);
 
 MazeNode getMazeNode(Maze maze, int x, int y);
-void setNodeWalls(Maze maze, int x, int y, int node);
+void setNodeWallsUnsafe(Maze maze, int x, int y, int node);
+void setNodeWall(Maze maze, int x, int y, bool enable, int wall);
 int getMazeSize(Maze maze);
 
 bool isWallTop(MazeNode node);
