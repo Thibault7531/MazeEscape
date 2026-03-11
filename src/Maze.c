@@ -255,6 +255,13 @@ void setNodeWallsUnsafe(Maze maze, int x, int y, int walls)
     maze->nodes[x+y*maze->size]->walls = walls;
 }
 
+int getNodeWalls(Maze maze, int x, int y)
+{
+    assert(x >= 0 && x < maze->size);
+    assert(y >= 0 && y < maze->size);
+    return maze->nodes[x+y*maze->size]->walls;
+}
+
 void setNodeWall(Maze maze, int x, int y, bool enable, int wall)
 {
     if (enable)
@@ -330,6 +337,36 @@ void setNodeWall(Maze maze, int x, int y, bool enable, int wall)
 int getMazeSize(Maze maze)
 {
     return maze->size;
+}
+
+int getEntryPointX(Maze maze)
+{
+    return maze->entryPointX;
+}
+
+int getEntryPointY(Maze maze)
+{
+    return maze->entryPointY;
+}
+
+int getEntryPointSide(Maze maze)
+{
+    return maze->entryPointSide;
+}
+
+int getExitPointX(Maze maze)
+{
+    return maze->exitPointX;
+}
+
+int getExitPointY(Maze maze)
+{
+    return maze->exitPointY;
+}
+
+int getExitPointSide(Maze maze)
+{
+    return maze->exitPointSide;
 }
 
 bool isWallTop(MazeNode node)

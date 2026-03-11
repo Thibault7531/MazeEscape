@@ -1,3 +1,6 @@
+#include <stdlib.h>
+
+#include "chemin.h"
 #include "raylib.h"
 
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
@@ -12,6 +15,8 @@ int main ()
 	SearchAndSetResourceDir("resources");
 
 	Maze maze = createRandomMaze(10);
+	Coord* path = malloc(maze->size * maze->size * sizeof(Coord));
+	int pathLength = trouverCheminAStar(maze, path);
 	
 	// game loop
 	while (!WindowShouldClose())
@@ -23,6 +28,7 @@ int main ()
 		DrawFPS(10, 10);
 
 		renderMaze(maze);
+		renderPath(maze, path, pathLength);
 
 		EndDrawing();
 	}

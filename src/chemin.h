@@ -1,12 +1,13 @@
 #ifndef CHEMIN_H
 #define CHEMIN_H
-
-#include "lab.h" 
+#include "Maze.h"
 
 typedef struct {
     int x, y;
 } Coord;
 
-int trouverCheminAStar(Labyrinthe *l, Coord *cheminResultat);
+int trouverCheminAStar(Maze maze, Coord *cheminResultat);
+
+void renderPath(Maze maze, Coord *path, int pathLength);
 
 #endif

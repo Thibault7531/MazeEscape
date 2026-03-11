@@ -3,7 +3,12 @@
 #include <math.h>
 #include <stdbool.h>
 
+#include "../build/external/raylib-master/src/raylib.h"
+
 #define INF 9999
+
+#define LARGEUR 10
+#define HAUTEUR 10
 
 
 typedef struct {
@@ -19,7 +24,8 @@ int distance(int x1, int y1, int x2, int y2) {
     return abs(x1-x2)+abs(y1-y2);
 }
 
-int trouverCheminAStar(Labyrinthe *l, Coord *cheminResultat) {
+int trouverCheminAStar(Maze maze, Coord *cheminResultat) {
+    //TODO: Refactor code to achieve higher standards
     NodeIA grille[LARGEUR][HAUTEUR];
     
     for(int x=0;x<LARGEUR;x++) {
@@ -28,10 +34,10 @@ int trouverCheminAStar(Labyrinthe *l, Coord *cheminResultat) {
         }
     }
 
-    int sx=l->départX;
-    int sy=l->départY;
+    int sx=getEntryPointX(maze);
+    int sy=getEntryPointY(maze);
     grille[sx][sy].g=0;
-    grille[sx][sy].f=distance(sx,sy,l->sortieX,l->sortieY);
+    grille[sx][sy].f=distance(sx,sy, getExitPointX(maze),getEntryPointY(maze));
     grille[sx][sy].ouvert=true;
 
     while(true) {
@@ -51,18 +57,18 @@ int trouverCheminAStar(Labyrinthe *l, Coord *cheminResultat) {
         if(curX==-1){
             return 0;
         } 
-        if(curX==l->sortieX && curY == l->sortieY){
+        if(curX==getExitPointX(maze) && curY == getExitPointY(maze)){
             break;
         }
 
         grille[curX][curY].ouvert=false;
         grille[curX][curY].ferme=true;
 
-        int murs=l->lab[curX][curY];
+        int murs = getNodeWalls(maze, curX, curY);
 
         int dx[]={0, 0, -1, 1};
         int dy[]={-1, 1, 0, 0};
-        int flags[]={HAUT, BAS, GAUCHE, DROITE};
+        int flags[]={TOPWALL, BOTTOMWALL, LEFTWALL, RIGHTWALL};
 
         for(int i=0; i<4; i++) {
             if(!(murs & flags[i])) { 
@@ -76,7 +82,7 @@ int trouverCheminAStar(Labyrinthe *l, Coord *cheminResultat) {
                         grille[nx][ny].px = curX;
                         grille[nx][ny].py = curY;
                         grille[nx][ny].g = nouveauG;
-                        grille[nx][ny].f =nouveauG+distance(nx, ny, l->sortieX, l->sortieY);
+                        grille[nx][ny].f =nouveauG+distance(nx, ny, getExitPointX(maze), getExitPointY(maze));
                         grille[nx][ny].ouvert = true;
                     }
                 }
@@ -84,9 +90,9 @@ int trouverCheminAStar(Labyrinthe *l, Coord *cheminResultat) {
         }
     }
 
-    int longueur = grille[l->sortieX][l->sortieY].g;
-    int tempX = l->sortieX;
-    int tempY = l->sortieY;
+    int longueur = grille[getExitPointX(maze)][getExitPointY(maze)].g;
+    int tempX = getExitPointX(maze);
+    int tempY = getExitPointY(maze);
 
     for(int i = longueur; i >= 0; i--) {
         cheminResultat[i] = (Coord){tempX, tempY};
@@ -97,4 +103,21 @@ int trouverCheminAStar(Labyrinthe *l, Coord *cheminResultat) {
     }
 
     return longueur + 1; 
+}
+
+void renderPath(Maze maze, Coord* path, int pathLength)
+{
+    Coord currentCoord = path[0];
+    int nodeSize = 700 / maze->size;
+    float lineThickness = .2f * nodeSize;
+    Vector2 startCoord = {290, 10};
+
+    for (int i = 1; i < pathLength; i++)
+    {
+        Coord nextCoord = path[i];
+        Vector2 lineStart = {startCoord.x + (currentCoord.x + .5f) * nodeSize, startCoord.y + (currentCoord.y + .5f) * nodeSize};
+        Vector2 lineEnd = {startCoord.x + (nextCoord.x + .5f) * nodeSize, startCoord.y + (nextCoord.y + .5f) * nodeSize};
+        DrawLineEx(lineStart, lineEnd, lineThickness, RED);
+        currentCoord = path[i];
+    }
 }

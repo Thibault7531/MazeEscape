@@ -34,8 +34,15 @@ void addRandomWall(Maze maze);
 
 MazeNode getMazeNode(Maze maze, int x, int y);
 void setNodeWallsUnsafe(Maze maze, int x, int y, int node);
+int getNodeWalls(Maze maze, int x, int y);
 void setNodeWall(Maze maze, int x, int y, bool enable, int wall);
 int getMazeSize(Maze maze);
+int getEntryPointX(Maze maze);
+int getEntryPointY(Maze maze);
+int getEntryPointSide(Maze maze);
+int getExitPointX(Maze maze);
+int getExitPointY(Maze maze);
+int getExitPointSide(Maze maze);
 
 bool isWallTop(MazeNode node);
 bool isWallLeft(MazeNode node);
