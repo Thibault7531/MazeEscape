@@ -1,17 +1,12 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef CHEMIN_H
+#define CHEMIN_H
 
-#include "Maze.h"
+#include "lab.h" 
 
 typedef struct {
     int x, y;
-} NodeCoord;
+} Coord;
 
-typedef struct {
-    NodeCoord neighbors[4];
-    int count;
-} NodeAdjacency;
-
-NodeAdjacency getAccessibleNeighbors(Maze maze, int x, int y);
+int trouverCheminAStar(Labyrinthe *l, Coord *cheminResultat);
 
 #endif
