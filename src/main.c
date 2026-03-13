@@ -1,11 +1,14 @@
 #include <stdlib.h>
 
-#include "Path.h"
 #include "raylib.h"
 
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
 
+#include <time.h>
+
+#include "AI.h"
 #include "Maze.h"
+#include "Path.h"
 
 int main ()
 {
@@ -13,6 +16,7 @@ int main ()
 	InitWindow(1280, 720, "MazeEscape");
 
 	SearchAndSetResourceDir("resources");
+	Texture wabbit = LoadTexture("wabbit_alpha.png");
 
 	Maze maze = createRandomMaze(10);
 	Path path = FindPathAStar(maze, getEntryPointX(maze), getEntryPointY(maze));
@@ -22,10 +26,15 @@ int main ()
 		maze = createRandomMaze(10);
 		path = FindPathAStar(maze, getEntryPointX(maze), getEntryPointY(maze));
 	}
+	AI ai = createAI(getEntryPointX(maze), getEntryPointY(maze), wabbit);
+	setPath(ai, path);
 	
 	// game loop
 	while (!WindowShouldClose())
 	{
+		float deltaTime = GetFrameTime();
+		updateAI(maze, ai, deltaTime);
+
 		BeginDrawing();
 
 		ClearBackground(BLACK);
@@ -34,9 +43,12 @@ int main ()
 
 		renderMaze(maze);
 		renderPath(maze, path);
+		renderAI(maze, ai);
 
 		EndDrawing();
 	}
+
+	UnloadTexture(wabbit);
 
 	destroyMaze(maze);
 	CloseWindow();
