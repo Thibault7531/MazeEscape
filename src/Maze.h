@@ -2,6 +2,8 @@
 
 #include <stdbool.h>
 
+#include "raylib.h"
+
 #define TOPWALL (1<<3)
 #define LEFTWALL (1<<2)
 #define RIGHTWALL (1<<1)
@@ -55,3 +57,7 @@ void setWallBottom(MazeNode node, bool enable);
 
 void printMaze(Maze maze);
 void renderMaze(Maze maze);
+void renderWall(Maze maze, int x, int y, int side, Color color);
+
+void GetMazeCoordsFromScreenCoords(int x, int y, Maze maze, int* xOut, int* yOut);
+int GetWallSideFromScreenCoords(int x, int y, Maze maze);

@@ -557,3 +557,88 @@ void renderMaze(Maze maze)
         }
     }
 }
+
+void renderWall(Maze maze, int x, int y, int side, Color color)
+{
+    int nodeSize = 700 / maze->size;
+    float lineThickness = .2f * nodeSize;
+    Vector2 startCoord = {290, 10};
+
+    switch (side)
+    {
+    case TOPWALL:
+        {
+            Vector2 lineStart = {startCoord.x + x * nodeSize, startCoord.y + y * nodeSize};
+            Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
+            DrawLineEx(lineStart, lineEnd, lineThickness, color);
+            break;
+        }
+
+    case RIGHTWALL:
+        {
+            Vector2 lineStart = {startCoord.x + (x+1) * nodeSize, startCoord.y + y * nodeSize};
+            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
+            DrawLineEx(lineStart, lineEnd, lineThickness, color);
+            break;
+        }
+
+    case BOTTOMWALL:
+        {
+            Vector2 lineStart = {startCoord.x + x * nodeSize, startCoord.y + (y+1) * nodeSize};
+            Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
+            DrawLineEx(lineStart, lineEnd, lineThickness, color);
+            break;
+        }
+
+    case LEFTWALL:
+        {
+            Vector2 lineStart = {startCoord.x + x * nodeSize, startCoord.y + y * nodeSize};
+            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
+            DrawLineEx(lineStart, lineEnd, lineThickness, color);
+            break;
+        }
+
+    default: break;
+    }
+}
+
+void GetMazeCoordsFromScreenCoords(int x, int y, Maze maze, int* xOut, int* yOut)
+{
+    int nodeSize = 700 / maze->size;
+    Vector2 startCoord = {290, 10};
+
+    *xOut = (x - startCoord.x) / nodeSize;
+    *yOut = (y - startCoord.y) / nodeSize;
+
+    if (*xOut < 0 || *yOut < 0 || *xOut >= maze->size || *yOut >= maze->size)
+    {
+        *xOut = -1;
+        *yOut = -1;
+    }
+}
+
+int GetWallSideFromScreenCoords(int x, int y, Maze maze)
+{
+    int nodeSize = 700 / maze->size;
+    Vector2 startCoord = {290, 10};
+
+    int xOut = (x - startCoord.x) / nodeSize;
+    int yOut = (y - startCoord.y) / nodeSize;
+
+    int xNode = x - startCoord.x - xOut * nodeSize;
+    int yNode = y - startCoord.y - yOut * nodeSize;
+
+    if (xNode < 0 || yNode < 0 || xNode >= nodeSize || yNode >= nodeSize)
+    {
+        return -1;
+    }
+
+    if (abs(xNode - nodeSize/2) > abs(yNode - nodeSize/2))
+    {
+        return xNode < nodeSize/2 ? LEFTWALL : RIGHTWALL;
+    }
+    else
+    {
+        return yNode < nodeSize/2 ? TOPWALL : BOTTOMWALL;
+    }
+}

@@ -12,6 +12,10 @@ AI createAI(int x, int y, Texture texture)
     ai->y = y;
     ai->texture = texture;
     ai->moving = false;
+    Path path;
+    path.length = 0;
+    path.path = NULL;
+    ai->path = path;
     return ai;
 }
 
@@ -40,14 +44,31 @@ void updateAI(Maze maze, AI ai, float deltaTime)
             ai->y = ai->nextCoord.y;
             ai->moving = false;
         }
+        if (fabs(ai->x - ai->nextCoord.x) > 1 && fabs(ai->y - ai->nextCoord.y) < 1)
+        {
+            ai->x = ai->nextCoord.x;
+            ai->y = ai->nextCoord.y;
+            ai->moving = false;
+        }
     }
 }
 
 void setPath(AI ai, Path path)
 {
+    if (ai->path.length != 0)
+    {
+        ai->x = ai->nextCoord.x;
+        ai->y = ai->nextCoord.y;
+    }
     ai->moving = false;
     ai->path = path;
     ai->pathIndex = 1;
+}
+
+void getNextPosition(AI ai, int* xOut, int* yOut)
+{
+    *xOut = ai->nextCoord.x;
+    *yOut = ai->nextCoord.y;
 }
 
 void renderAI(Maze maze, AI ai)
