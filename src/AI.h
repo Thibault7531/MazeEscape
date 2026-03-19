@@ -22,5 +22,6 @@ void destroyAI(AI ai);
 void updateAI(Maze maze, AI ai, float deltaTime);
 
 void setPath(AI ai, Path path);
+void getNextPosition(AI ai, int* xOut, int* yOut);
 
 void renderAI(Maze maze, AI ai);
