@@ -450,7 +450,6 @@ void renderMaze(Maze maze)
     int nodeSize = 700 / maze->size;
     float lineThickness = .2f * nodeSize;
     Vector2 startCoord = {290, 10};
-
     for (int y = 0; y < maze->size; y++)
     {
         for (int x = 0; x < maze->size; x++)
@@ -460,25 +459,25 @@ void renderMaze(Maze maze)
             {
                 Vector2 lineStart = {startCoord.x + x * nodeSize - lineThickness/2, startCoord.y + y * nodeSize};
                 Vector2 lineEnd = {lineStart.x + nodeSize + lineThickness, lineStart.y};
-                DrawLineEx(lineStart, lineEnd, lineThickness, WHITE);
+                DrawLineEx(lineStart, lineEnd, lineThickness, DARKGREEN);
             }
             if (isWallLeft(node))
             {
                 Vector2 lineStart = {startCoord.x + x * nodeSize, startCoord.y + y * nodeSize - lineThickness/2};
                 Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize + lineThickness};
-                DrawLineEx(lineStart, lineEnd, lineThickness, WHITE);
+                DrawLineEx(lineStart, lineEnd, lineThickness, DARKGREEN);
             }
             if (isWallRight(node))
             {
                 Vector2 lineStart = {startCoord.x + (x + 1) * nodeSize, startCoord.y + y * nodeSize - lineThickness/2};
                 Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize + lineThickness};
-                DrawLineEx(lineStart, lineEnd, lineThickness, WHITE);
+                DrawLineEx(lineStart, lineEnd, lineThickness, DARKGREEN);
             }
             if (isWallBottom(node))
             {
                 Vector2 lineStart = {startCoord.x + x * nodeSize - lineThickness/2, startCoord.y + (y + 1) * nodeSize};
                 Vector2 lineEnd = {lineStart.x + nodeSize + lineThickness, lineStart.y};
-                DrawLineEx(lineStart, lineEnd, lineThickness, WHITE);
+                DrawLineEx(lineStart, lineEnd, lineThickness, DARKGREEN);
             }
         }
     }
@@ -490,7 +489,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + maze->entryPointX * nodeSize, startCoord.y + maze->entryPointY * nodeSize};
             Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
-            DrawLineEx(lineStart, lineEnd, 5, GREEN);
+            DrawLineEx(lineStart, lineEnd, 5, BROWN);
             break;
         }
 
@@ -498,7 +497,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + (maze->entryPointX+1) * nodeSize, startCoord.y + maze->entryPointY * nodeSize};
             Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
-            DrawLineEx(lineStart, lineEnd, 5, GREEN);
+            DrawLineEx(lineStart, lineEnd, 5, BROWN);
             break;
         }
 
@@ -506,7 +505,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + maze->entryPointX * nodeSize, startCoord.y + (maze->entryPointY+1) * nodeSize};
             Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
-            DrawLineEx(lineStart, lineEnd, 5, GREEN);
+            DrawLineEx(lineStart, lineEnd, 5, BROWN);
             break;
         }
 
@@ -514,7 +513,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + maze->entryPointX * nodeSize, startCoord.y + maze->entryPointY * nodeSize};
             Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
-            DrawLineEx(lineStart, lineEnd, 5, GREEN);
+            DrawLineEx(lineStart, lineEnd, 5, BROWN);
             break;
         }
 
@@ -556,4 +555,6 @@ void renderMaze(Maze maze)
             break;
         }
     }
+    
 }
+

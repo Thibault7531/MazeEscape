@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
-
+#include <raylib.h>
 #define TOPWALL (1<<3)
 #define LEFTWALL (1<<2)
 #define RIGHTWALL (1<<1)
