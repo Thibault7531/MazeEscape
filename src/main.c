@@ -31,8 +31,18 @@ int main ()
 
 	double startTime=GetTime();
 	float timer=0.0f;
+	int cpt=0; 
+	int nbobjets=4;
+	int oeufsX[4],oeufsY[3], fleursX[3], fleursY[3];
 
 	Maze maze = createRandomMaze(10);
+	for (int i = 0; i < nbobjets; i++) {
+        oeufsX[i] = GetRandomValue(0, maze->size - 1);
+        oeufsY[i] = GetRandomValue(0, maze->size - 1);
+        fleursX[i] = GetRandomValue(0, maze->size - 1);
+        fleursY[i] = GetRandomValue(0, maze->size - 1);
+	}
+
 	Path path = FindPathAStar(maze, getEntryPointX(maze), getEntryPointY(maze));
 
 
@@ -56,11 +66,29 @@ int main ()
 
 		float deltaTime = GetFrameTime();
 		updateAI(maze, ai, deltaTime);
+////////////////
+        int playerX = (int)(ai->x + 0.5f); 
+        int playerY = (int)(ai->y + 0.5f);
 
+        for (int i = 0; i < nbobjets; i++) {
+            // Si sur un oeuf
+            if (playerX == oeufsX[i] && playerY == oeufsY[i]) {
+                cpt += 10;
+                oeufsX[i] = GetRandomValue(0, maze->size - 1);
+                oeufsY[i] = GetRandomValue(0, maze->size - 1);
+            }
+            // Si sur une fleur
+            if (playerX == fleursX[i] && playerY == fleursY[i]) {
+                cpt += 5;
+                fleursX[i] = GetRandomValue(0, maze->size - 1);
+                fleursY[i] = GetRandomValue(0, maze->size - 1);
+            }
+        }
+
+///////////
 		int mouseX, mouseY;
 		mouseX = GetMouseX();
 		mouseY = GetMouseY();
-
 		int x, y;
 		GetMazeCoordsFromScreenCoords(mouseX, mouseY, maze, &x, &y);
 		int side = GetWallSideFromScreenCoords(mouseX, mouseY, maze);
@@ -92,6 +120,7 @@ int main ()
 		BeginDrawing();
 
 		ClearBackground((Color){ 154, 205, 50, 255 });
+		DrawText(TextFormat("SCORE : %d", cpt), 1100, 50, 20, RAYWHITE);
 		DrawText(TextFormat("TEMPS : %.1f s",timer),1100,20,20,WHITE);
 
 		DrawFPS(10, 10);
@@ -104,31 +133,24 @@ int main ()
 float scale = 0.6f; // 0.6 = 60% de la case. Augmente à 0.8 pour plus gros.
             float objSize = nodeSize * scale;
             float centerOffset = (nodeSize - objSize) / 2.0f;
+			for (int i = 0; i < nbobjets; i++) {
+            // Dessiner les oeufs
+            Rectangle destOeuf = { 
+                startCoord.x + oeufsX[i] * nodeSize + centerOffset, 
+                startCoord.y + oeufsY[i] * nodeSize + centerOffset, 
+                objSize, objSize 
+            };
+            DrawTexturePro(textureOeuf, (Rectangle){0,0,(float)textureOeuf.width,(float)textureOeuf.height}, destOeuf, (Vector2){0,0}, 0.0f, WHITE);
 
-            for (int y = 0; y < maze->size; y++) {
-                for (int x = 0; x < maze->size; x++) {
-                    int posX = startCoord.x + x * nodeSize;
-                    int posY = startCoord.y + y * nodeSize;
-
-                    if ((x == getEntryPointX(maze) && y == getEntryPointY(maze)) || 
-                        (x == getExitPointX(maze) && y == getExitPointY(maze))) continue;
-
-                    int decideur = (x * 11 + y * 17) % 30; 
-
-                    if (decideur == 1) {
-                        // Dessin de l'oeuf redimensionné
-                        Rectangle source = { 0.0f, 0.0f, (float)textureOeuf.width, (float)textureOeuf.height };
-                        Rectangle dest = { posX + centerOffset, posY + centerOffset, objSize, objSize };
-                        DrawTexturePro(textureOeuf, source, dest, (Vector2){0,0}, 0.0f, WHITE);
-                    } 
-                    else if (decideur == 2) {
-                        // Dessin de la fleur redimensionnée
-                        Rectangle source = { 0.0f, 0.0f, (float)textureFleur.width, (float)textureFleur.height };
-                        Rectangle dest = { posX + centerOffset, posY + centerOffset, objSize, objSize };
-                        DrawTexturePro(textureFleur, source, dest, (Vector2){0,0}, 0.0f, WHITE);
-            }
+            // Dessiner les fleurs
+            Rectangle destFleur = { 
+                startCoord.x + fleursX[i] * nodeSize + centerOffset, 
+                startCoord.y + fleursY[i] * nodeSize + centerOffset, 
+                objSize, objSize 
+            };
+            DrawTexturePro(textureFleur, (Rectangle){0,0,(float)textureFleur.width,(float)textureFleur.height}, destFleur, (Vector2){0,0}, 0.0f, WHITE);
         }
-    }
+
 		renderPath(maze, path);
 		renderAI(maze, ai);
 
@@ -143,9 +165,11 @@ float scale = 0.6f; // 0.6 = 60% de la case. Augmente à 0.8 pour plus gros.
 	}
 	
 	UnloadTexture(wabbit);
-	destroyMaze(maze);
-	CloseWindow();
+	UnloadTexture(textureOeuf);
+	UnloadTexture(textureFleur);
 	UnloadMusicStream(music);
 	CloseAudioDevice();
+	destroyMaze(maze);
+	CloseWindow();
 	return 0;
 }
