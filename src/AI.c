@@ -38,13 +38,26 @@ void updateAI(Maze maze, AI ai, float deltaTime)
     {
         ai->x += (ai->nextCoord.x - ai->currentCoord.x) * deltaTime;
         ai->y += (ai->nextCoord.y - ai->currentCoord.y) * deltaTime;
-        if (fabs(ai->x - ai->nextCoord.x) < .01f && fabs(ai->y - ai->nextCoord.y) < .01f)
+
+        if (ai->nextCoord.x < ai->currentCoord.x && ai->nextCoord.x > ai->x)
         {
             ai->x = ai->nextCoord.x;
             ai->y = ai->nextCoord.y;
             ai->moving = false;
         }
-        if (fabs(ai->x - ai->nextCoord.x) > 1 && fabs(ai->y - ai->nextCoord.y) < 1)
+        if (ai->nextCoord.x > ai->currentCoord.x && ai->nextCoord.x < ai->x)
+        {
+            ai->x = ai->nextCoord.x;
+            ai->y = ai->nextCoord.y;
+            ai->moving = false;
+        }
+        if (ai->nextCoord.y < ai->currentCoord.y && ai->nextCoord.y > ai->y)
+        {
+            ai->x = ai->nextCoord.x;
+            ai->y = ai->nextCoord.y;
+            ai->moving = false;
+        }
+        if (ai->nextCoord.y > ai->currentCoord.y && ai->nextCoord.y < ai->y)
         {
             ai->x = ai->nextCoord.x;
             ai->y = ai->nextCoord.y;
@@ -55,12 +68,6 @@ void updateAI(Maze maze, AI ai, float deltaTime)
 
 void setPath(AI ai, Path path)
 {
-    if (ai->path.length != 0)
-    {
-        ai->x = ai->nextCoord.x;
-        ai->y = ai->nextCoord.y;
-    }
-    ai->moving = false;
     ai->path = path;
     ai->pathIndex = 1;
 }
