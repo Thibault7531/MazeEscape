@@ -24,7 +24,6 @@ int main ()
 
 	double startTime=GetTime();
 	float timer=0.0f;
-	int cpt=0;
 
 	Maze maze = createRandomMaze(10);
 	Path path = FindPathAStar(maze, getEntryPointX(maze), getEntryPointY(maze));
@@ -90,7 +89,7 @@ int main ()
 		BeginDrawing();
 
 		ClearBackground((Color){ 154, 205, 50, 255 });
-		DrawText(TextFormat("SCORE : %d", cpt), 1100, 50, 20, RAYWHITE);
+		DrawText(TextFormat("SCORE : %d", getBonusPoints()), 1100, 50, 20, RAYWHITE);
 		DrawText(TextFormat("TEMPS : %.1f s",timer),1100,20,20,WHITE);
 
 		DrawFPS(10, 10);
