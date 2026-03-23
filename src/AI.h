@@ -16,12 +16,13 @@ struct AI
 };
 typedef struct AI* AI;
 
-AI createAI(int x, int y, Texture texture);
+AI createAI(int x, int y);
 void destroyAI(AI ai);
 
 void updateAI(Maze maze, AI ai, float deltaTime);
 
 void setPath(AI ai, Path path);
+void getCurrentPosition(AI ai, int* xOut, int* yOut);
 void getNextPosition(AI ai, int* xOut, int* yOut);
 
 void renderAI(Maze maze, AI ai);

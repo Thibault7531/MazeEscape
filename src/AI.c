@@ -5,12 +5,12 @@
 
 #include "../build/external/raylib-master/src/raylib.h"
 
-AI createAI(int x, int y, Texture texture)
+AI createAI(int x, int y)
 {
     AI ai = malloc(sizeof(struct AI));
     ai->x = x;
     ai->y = y;
-    ai->texture = texture;
+    ai->texture = LoadTexture("wabbit_alpha.png");
     ai->moving = false;
     Path path;
     path.length = 0;
@@ -21,6 +21,7 @@ AI createAI(int x, int y, Texture texture)
 
 void destroyAI(AI ai)
 {
+    UnloadTexture(ai->texture);
     free(ai);
 }
 
@@ -70,6 +71,12 @@ void setPath(AI ai, Path path)
 {
     ai->path = path;
     ai->pathIndex = 1;
+}
+
+void getCurrentPosition(AI ai, int* xOut, int* yOut)
+{
+    *xOut = ai->currentCoord.x;
+    *yOut = ai->currentCoord.y;
 }
 
 void getNextPosition(AI ai, int* xOut, int* yOut)
