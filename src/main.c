@@ -8,6 +8,7 @@
 #include "Bonuses.h"
 #include "Game.h"
 #include "Maze.h"
+#include "Menu.h"
 #include "Path.h"
 
 int main ()
@@ -22,24 +23,33 @@ int main ()
 	PlayMusicStream(music);
 	music.looping=true;
 
-	initGame();
+	bool inMenu = true;
+
+	initMenu();
 	
 	// game loop
 	while (!WindowShouldClose())
 	{
+		if (inMenu && shouldStart())
+		{
+			initGame();
+			inMenu = false;
+		}
+
 		UpdateMusicStream(music);
 		updateGame();
 
 		BeginDrawing();
 		{
 			ClearBackground((Color){ 154, 205, 50, 255 });
-			renderGame();
+			if (inMenu) renderMenu();
+			if (!inMenu) renderGame();
 			DrawFPS(10, 10);
 		}
 		EndDrawing();
 	}
 
-	unloadGame();
+	if (shouldStart()) unloadGame();
 	UnloadMusicStream(music);
 	CloseAudioDevice();
 	CloseWindow();

@@ -23,17 +23,40 @@ Maze createEmptyMaze(int size)
 Maze createRandomMaze(int size)
 {
     Maze maze = createEmptyMaze(size);
-    int startAreaX = size/2-1;
-    int startAreaY = size/2-1;
-    int startAreaSize = size%2 == 0 ? 2 : 3;
 
     srand(time(NULL));
+
+    maze->startAreaX = maze->size/2-1;
+    maze->startAreaY = maze->size/2-1;
+    maze->startAreaSizeX = maze->size%2 == 0 ? 2 : 3;
+    maze->startAreaSizeY = maze->size%2 == 0 ? 2 : 3;
 
     addBorders(maze);
     addStartArea(maze);
     addRandomStartAreaExits(maze);
     addRandomExit(maze);
 
+    for (int i = 0; i < pow(maze->size*.75f, 2); i++)
+    {
+        addRandomWall(maze);
+    }
+
+    return maze;
+}
+
+Maze createMenuMaze()
+{
+    Maze maze = createEmptyMaze(20);
+
+    srand(time(NULL));
+
+    maze->startAreaX = 4;
+    maze->startAreaY = 6;
+    maze->startAreaSizeX = 12;
+    maze->startAreaSizeY = 8;
+
+    addBorders(maze);
+    addStartArea(maze);
     for (int i = 0; i < pow(maze->size*.65f, 2); i++)
     {
         addRandomWall(maze);
@@ -77,59 +100,65 @@ void addBorders(Maze maze)
 
 void addStartArea(Maze maze)
 {
-    int startAreaX = maze->size/2-1;
-    int startAreaY = maze->size/2-1;
-    int startAreaSize = maze->size%2 == 0 ? 2 : 3;
-
-    for (int y = 0; y < startAreaSize; y++)
+    for (int y = 0; y < maze->startAreaSizeY; y++)
     {
-        for (int x = 0; x < startAreaSize; x++)
+        for (int x = 0; x < maze->startAreaSizeX; x++)
         {
-            if (x == 0) setNodeWall(maze, startAreaX + x, startAreaY + y, true, LEFTWALL);
-            if (x == startAreaSize - 1) setNodeWall(maze, startAreaX + x, startAreaY + y, true, RIGHTWALL);
-            if (y == 0) setNodeWall(maze, startAreaX + x, startAreaY + y, true, TOPWALL);
-            if (y == startAreaSize - 1) setNodeWall(maze, startAreaX + x, startAreaY + y, true, BOTTOMWALL);
+            if (x == 0) setNodeWall(maze, maze->startAreaX + x, maze->startAreaY + y, true, LEFTWALL);
+            if (x == maze->startAreaSizeX - 1) setNodeWall(maze, maze->startAreaX + x, maze->startAreaY + y, true, RIGHTWALL);
+            if (y == 0) setNodeWall(maze, maze->startAreaX + x, maze->startAreaY + y, true, TOPWALL);
+            if (y == maze->startAreaSizeY - 1) setNodeWall(maze, maze->startAreaX + x, maze->startAreaY + y, true, BOTTOMWALL);
+        }
+    }
+}
+
+void addMenuArea(Maze maze, int x, int y, int sizeX, int sizeY)
+{
+    for (int y2 = 0; y2 < sizeY; y2++)
+    {
+        for (int x2 = 0; x2 < sizeX; x2++)
+        {
+            if (x2 == 0) setNodeWall(maze, x + x2, y + y2, true, LEFTWALL);
+            if (x2 == sizeX - 1) setNodeWall(maze, x + x2, y + y2, true, RIGHTWALL);
+            if (y2 == 0) setNodeWall(maze, x + x2, y + y2, true, TOPWALL);
+            if (y2 == sizeY - 1) setNodeWall(maze, x + x2, y + y2, true, BOTTOMWALL);
         }
     }
 }
 
 void addRandomStartAreaExits(Maze maze)
 {
-    int startAreaX = maze->size/2-1;
-    int startAreaY = maze->size/2-1;
-    int startAreaSize = maze->size%2 == 0 ? 2 : 3;
-
-    int startPos = rand() % (startAreaSize*4);
-    switch (startPos/startAreaSize)
+    int startPos = rand() % (maze->startAreaSizeX*4);
+    switch (startPos/maze->startAreaSizeX)
     {
     case 0:
         {
-            maze->entryPointX = startAreaX + startPos%startAreaSize;
-            maze->entryPointY = startAreaY;
+            maze->entryPointX = maze->startAreaX + startPos%maze->startAreaSizeX;
+            maze->entryPointY = maze->startAreaY;
             maze->entryPointSide = TOPWALL;
             break;
         }
 
     case 1:
         {
-            maze->entryPointX = startAreaX + startAreaSize - 1;
-            maze->entryPointY = startAreaY + startPos%startAreaSize;
+            maze->entryPointX = maze->startAreaX + maze->startAreaSizeX - 1;
+            maze->entryPointY = maze->startAreaY + startPos%maze->startAreaSizeX;
             maze->entryPointSide = RIGHTWALL;
             break;
         }
 
     case 2:
         {
-            maze->entryPointX = startAreaX + startAreaSize - startPos%startAreaSize - 1;
-            maze->entryPointY = startAreaY + startAreaSize - 1;
+            maze->entryPointX = maze->startAreaX + maze->startAreaSizeX - startPos%maze->startAreaSizeX - 1;
+            maze->entryPointY = maze->startAreaY + maze->startAreaSizeX - 1;
             maze->entryPointSide = BOTTOMWALL;
             break;
         }
 
     case 3:
         {
-            maze->entryPointX = startAreaX;
-            maze->entryPointY = startAreaY + startAreaSize - 1 - startPos%startAreaSize;
+            maze->entryPointX = maze->startAreaX;
+            maze->entryPointY = maze->startAreaY + maze->startAreaSizeX - 1 - startPos%maze->startAreaSizeX;
             maze->entryPointSide = LEFTWALL;
             break;
         }
@@ -184,10 +213,6 @@ void addRandomExit(Maze maze)
 
 void addRandomWall(Maze maze)
 {
-    int startAreaX = maze->size/2-1;
-    int startAreaY = maze->size/2-1;
-    int startAreaSize = maze->size%2 == 0 ? 2 : 3;
-
     int x = rand() % maze->size;
     int y = rand() % maze->size;
     int side = rand() % 4;
@@ -195,7 +220,7 @@ void addRandomWall(Maze maze)
     {
     case 0:
         {
-            while (y == 0 || (x >= startAreaX && x < startAreaX + startAreaSize && y >= startAreaY && y <= startAreaY + startAreaSize) || isWallTop(getMazeNode(maze, x, y)))
+            while (y == 0 || (x >= maze->startAreaX && x < maze->startAreaX + maze->startAreaSizeX && y >= maze->startAreaY && y <= maze->startAreaY + maze->startAreaSizeY) || isWallTop(getMazeNode(maze, x, y)))
             {
                 x = rand() % maze->size;
                 y = rand() % maze->size;
@@ -206,7 +231,7 @@ void addRandomWall(Maze maze)
 
     case 1:
         {
-            while (x == maze->size - 1 || (x >= startAreaX - 1 && x < startAreaX + startAreaSize && y >= startAreaY && y < startAreaY + startAreaSize) || isWallRight(getMazeNode(maze, x, y)))
+            while (x == maze->size - 1 || (x >= maze->startAreaX - 1 && x < maze->startAreaX + maze->startAreaSizeX && y >= maze->startAreaY && y < maze->startAreaY + maze->startAreaSizeY) || isWallRight(getMazeNode(maze, x, y)))
             {
                 x = rand() % maze->size;
                 y = rand() % maze->size;
@@ -217,7 +242,7 @@ void addRandomWall(Maze maze)
 
     case 2:
         {
-            while (y == maze->size - 1 || (x >= startAreaX && x < startAreaX + startAreaSize && y >= startAreaY - 1 && y < startAreaY + startAreaSize) || isWallBottom(getMazeNode(maze, x, y)))
+            while (y == maze->size - 1 || (x >= maze->startAreaX && x < maze->startAreaX + maze->startAreaSizeX && y >= maze->startAreaY - 1 && y < maze->startAreaY + maze->startAreaSizeY) || isWallBottom(getMazeNode(maze, x, y)))
             {
                 x = rand() % maze->size;
                 y = rand() % maze->size;
@@ -228,7 +253,7 @@ void addRandomWall(Maze maze)
 
     case 3:
         {
-            while (x == 0 || (x >= startAreaX && x <= startAreaX + startAreaSize && y >= startAreaY && y < startAreaY + startAreaSize) || isWallLeft(getMazeNode(maze, x, y)))
+            while (x == 0 || (x >= maze->startAreaX && x <= maze->startAreaX + maze->startAreaSizeX && y >= maze->startAreaY && y < maze->startAreaY + maze->startAreaSizeY) || isWallLeft(getMazeNode(maze, x, y)))
             {
                 x = rand() % maze->size;
                 y = rand() % maze->size;

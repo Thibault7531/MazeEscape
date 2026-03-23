@@ -119,6 +119,7 @@ void renderGame()
 
     renderMaze(maze);
     renderBonuses(maze);
+    renderScore();
 
     renderPath(maze, path);
     renderAI(maze, ai);
@@ -136,6 +137,11 @@ void renderGame()
         if (node->walls & side) renderWall(maze, x, y, side, (Color){255, 0, 0, 122});
         else renderWall(maze, x, y, side, (WallAmount > 0 && isGameRunning) ? (Color){255, 255, 255, 122} : (Color){255, 0, 0, 122});
     }
+}
+
+bool isRunning()
+{
+    return isGameRunning;
 }
 
 void unloadGame()

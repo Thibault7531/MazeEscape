@@ -14,14 +14,14 @@ int Points = 0;
 
 double LastPenalty = 0;
 
-void getRandomPosition(int size, int* x, int* y)
+void getRandomPosition(Maze maze, int* x, int* y)
 {
-    *x = GetRandomValue(0, size - 1);
-    *y = GetRandomValue(0, size - 1);
-    while (*x >= size / 2 - 1 && *x < size / 2 + 1 && *y >= size / 2 - 1 && *y < size / 2 + 1)
+    *x = GetRandomValue(0, maze->size - 1);
+    *y = GetRandomValue(0, maze->size - 1);
+    while (*x >= maze->startAreaX && *x < maze->startAreaX + maze->startAreaSizeX && *y >= maze->startAreaY && *y < maze->startAreaY + maze->startAreaSizeY)
     {
-        *x = GetRandomValue(0, size - 1);
-        *y = GetRandomValue(0, size - 1);
+        *x = GetRandomValue(0, maze->size - 1);
+        *y = GetRandomValue(0, maze->size - 1);
     }
 }
 
@@ -36,8 +36,8 @@ void initBonuses(Maze maze)
     memset(FlowerY, 0, 4 * sizeof(int));
 
     for (int i = 0; i < BonusNumber; i++) {
-        getRandomPosition(maze->size, &EggX[i], &EggY[i]);
-        getRandomPosition(maze->size, &FlowerX[i], &FlowerY[i]);
+        getRandomPosition(maze, &EggX[i], &EggY[i]);
+        getRandomPosition(maze, &FlowerX[i], &FlowerY[i]);
     }
 
     Points = 0;
@@ -50,14 +50,12 @@ void updateBonuses(Maze maze, int positionX, int positionY, bool isAIStuck)
         // Si sur un oeuf
         if (positionX == EggX[i] && positionY == EggY[i]) {
             Points += 10;
-            getRandomPosition(maze->size, &EggX[i], &EggY[i]);
+            getRandomPosition(maze, &EggX[i], &EggY[i]);
         }
         // Si sur une fleur
         if (positionX == FlowerX[i] && positionY == FlowerY[i]) {
             Points += 5;
-            FlowerX[i] = GetRandomValue(0, maze->size - 1);
-            FlowerY[i] = GetRandomValue(0, maze->size - 1);
-            getRandomPosition(maze->size, &FlowerX[i], &FlowerY[i]);
+            getRandomPosition(maze, &FlowerX[i], &FlowerY[i]);
         }
     }
 
@@ -93,7 +91,10 @@ void renderBonuses(Maze maze)
         };
         DrawTexturePro(Flower, (Rectangle){0,0,(float)Flower.width,(float)Flower.height}, destFleur, (Vector2){0,0}, 0.0f, WHITE);
     }
+}
 
+void renderScore()
+{
     DrawText(TextFormat("SCORE : %d", Points), 1100, 50, 20, GetTime() - LastPenalty > .25f ? WHITE : RED);
 }
 

@@ -21,11 +21,13 @@ struct Maze
     MazeNode* nodes;
     int entryPointX, entryPointY, entryPointSide;
     int exitPointX, exitPointY, exitPointSide;
+    int startAreaX, startAreaY, startAreaSizeX, startAreaSizeY;
 };
 typedef struct Maze* Maze;
 
 Maze createEmptyMaze(int size);
 Maze createRandomMaze(int size);
+Maze createMenuMaze();
 void destroyMaze(Maze maze);
 
 void addBorders(Maze maze);
