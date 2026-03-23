@@ -85,6 +85,11 @@ void getNextPosition(AI ai, int* xOut, int* yOut)
     *yOut = ai->nextCoord.y;
 }
 
+bool isAIStuck(AI ai)
+{
+    return ai->path.length == 0;
+}
+
 void renderAI(Maze maze, AI ai)
 {
     Vector2 startCoord = {290, 10};

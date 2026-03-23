@@ -24,5 +24,6 @@ void updateAI(Maze maze, AI ai, float deltaTime);
 void setPath(AI ai, Path path);
 void getCurrentPosition(AI ai, int* xOut, int* yOut);
 void getNextPosition(AI ai, int* xOut, int* yOut);
+bool isAIStuck(AI ai);
 
 void renderAI(Maze maze, AI ai);

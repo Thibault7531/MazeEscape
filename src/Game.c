@@ -49,7 +49,7 @@ void updateGame()
     int aiX;
     int aiY;
     getCurrentPosition(ai, &aiX, &aiY);
-    updateBonuses(maze, aiX, aiY);
+    updateBonuses(maze, aiX, aiY, isAIStuck(ai));
 
     int mouseX, mouseY;
     mouseX = GetMouseX();

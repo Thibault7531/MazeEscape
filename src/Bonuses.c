@@ -3,12 +3,16 @@
 #include "raylib.h"
 #include <string.h>
 
+#include "../build/external/raylib-master/src/raylib.h"
+
 Texture Egg;
 Texture Flower;
 
 int BonusNumber = 4;
 int EggX[4], EggY[4], FlowerX[4], FlowerY[4];
 int Points = 0;
+
+double LastPenalty = 0;
 
 void getRandomPosition(int size, int* x, int* y)
 {
@@ -37,9 +41,10 @@ void initBonuses(Maze maze)
     }
 
     Points = 0;
+    LastPenalty = 0;
 }
 
-void updateBonuses(Maze maze, int positionX, int positionY)
+void updateBonuses(Maze maze, int positionX, int positionY, bool isAIStuck)
 {
     for (int i = 0; i < BonusNumber; i++) {
         // Si sur un oeuf
@@ -54,6 +59,12 @@ void updateBonuses(Maze maze, int positionX, int positionY)
             FlowerY[i] = GetRandomValue(0, maze->size - 1);
             getRandomPosition(maze->size, &FlowerX[i], &FlowerY[i]);
         }
+    }
+
+    if (isAIStuck && GetTime() - LastPenalty > .5f)
+    {
+        Points -= 1;
+        LastPenalty = GetTime();
     }
 }
 
