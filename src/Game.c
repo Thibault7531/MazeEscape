@@ -6,8 +6,13 @@
 #include "Path.h"
 #include "../build/external/raylib-master/src/raylib.h"
 
+bool isGameRunning = false;
+
 double StartTime;
 float Timer;
+
+int WallAmount = 0;
+double LastWallAdded = 0;
 
 bool leftMouseDown = false;
 bool rightMouseDown = false;
@@ -37,55 +42,80 @@ void initGame()
 
     leftMouseDown = false;
     rightMouseDown = false;
+
+    WallAmount = 5;
+    LastWallAdded = GetTime();
+
+    isGameRunning = true;
 }
 
 void updateGame()
 {
-    Timer=(float)(GetTime()-StartTime);
-
-    float deltaTime = GetFrameTime();
-    updateAI(maze, ai, deltaTime);
-
-    int aiX;
-    int aiY;
-    getCurrentPosition(ai, &aiX, &aiY);
-    updateBonuses(maze, aiX, aiY, isAIStuck(ai));
-
-    int mouseX, mouseY;
-    mouseX = GetMouseX();
-    mouseY = GetMouseY();
-    int x, y;
-    GetMazeCoordsFromScreenCoords(mouseX, mouseY, maze, &x, &y);
-    int side = GetWallSideFromScreenCoords(mouseX, mouseY, maze);
-
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && !leftMouseDown)
+    if (isGameRunning)
     {
-        MazeNode node = getMazeNode(maze, x, y);
-        setNodeWall(maze, x, y, true, side);
-        int nextX, nextY;
-        getNextPosition(ai, &nextX, &nextY);
-        path = FindPathAStar(maze, nextX, nextY);
-        setPath(ai, path);
-        leftMouseDown = true;
-    }
-    if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) leftMouseDown = false;
+        Timer=(float)(GetTime()-StartTime);
 
-    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && !rightMouseDown)
-    {
-        MazeNode node = getMazeNode(maze, x, y);
-        setNodeWall(maze, x, y, false, side);
-        int nextX, nextY;
-        getNextPosition(ai, &nextX, &nextY);
-        path = FindPathAStar(maze, nextX, nextY);
-        setPath(ai, path);
-        rightMouseDown = true;
+        float deltaTime = GetFrameTime();
+        updateAI(maze, ai, deltaTime);
+
+        int aiX;
+        int aiY;
+        getCurrentPosition(ai, &aiX, &aiY);
+        updateBonuses(maze, aiX, aiY, isAIStuck(ai));
+
+        if (GetTime() - LastWallAdded > 5)
+        {
+            WallAmount++;
+            LastWallAdded = GetTime();
+        }
+        if (WallAmount >= 5)
+        {
+            WallAmount = 5;
+            LastWallAdded = GetTime();
+        }
+
+        int mouseX, mouseY;
+        mouseX = GetMouseX();
+        mouseY = GetMouseY();
+        int x, y;
+        GetMazeCoordsFromScreenCoords(mouseX, mouseY, maze, &x, &y);
+        int side = GetWallSideFromScreenCoords(mouseX, mouseY, maze);
+
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && !leftMouseDown && WallAmount > 0 && !(getNodeWalls(maze, x, y) & side))
+        {
+            MazeNode node = getMazeNode(maze, x, y);
+            setNodeWall(maze, x, y, true, side);
+            int nextX, nextY;
+            getNextPosition(ai, &nextX, &nextY);
+            path = FindPathAStar(maze, nextX, nextY);
+            setPath(ai, path);
+            leftMouseDown = true;
+            WallAmount--;
+        }
+        if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) leftMouseDown = false;
+
+        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && !rightMouseDown && (getNodeWalls(maze, x, y) & side))
+        {
+            MazeNode node = getMazeNode(maze, x, y);
+            setNodeWall(maze, x, y, false, side);
+            int nextX, nextY;
+            getNextPosition(ai, &nextX, &nextY);
+            path = FindPathAStar(maze, nextX, nextY);
+            setPath(ai, path);
+            rightMouseDown = true;
+            WallAmount++;
+        }
+        if (!IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) rightMouseDown = false;
+
+        getCurrentPosition(ai, &aiX, &aiY);
+        if (aiX == getExitPointX(maze) && aiY == getExitPointY(maze)) isGameRunning = false;
     }
-    if (!IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) rightMouseDown = false;
 }
 
 void renderGame()
 {
     DrawText(TextFormat("TEMPS : %.1f s", Timer),1100,20,20, WHITE);
+    DrawText(TextFormat("WALLS : %d", WallAmount),1100,100,20, WHITE);
 
     renderMaze(maze);
     renderBonuses(maze);
@@ -100,11 +130,11 @@ void renderGame()
     GetMazeCoordsFromScreenCoords(mouseX, mouseY, maze, &x, &y);
     int side = GetWallSideFromScreenCoords(mouseX, mouseY, maze);
 
-    if (x != -1 && y != -1)
+    if (isGameRunning && x != -1 && y != -1)
     {
         MazeNode node = getMazeNode(maze, x, y);
         if (node->walls & side) renderWall(maze, x, y, side, (Color){255, 0, 0, 122});
-        else renderWall(maze, x, y, side, (Color){255, 255, 255, 122});
+        else renderWall(maze, x, y, side, WallAmount > 0 ? (Color){255, 255, 255, 122} : (Color){255, 0, 0, 122});
     }
 }
 
