@@ -93,6 +93,8 @@ void renderBonuses(Maze maze)
         };
         DrawTexturePro(Flower, (Rectangle){0,0,(float)Flower.width,(float)Flower.height}, destFleur, (Vector2){0,0}, 0.0f, WHITE);
     }
+
+    DrawText(TextFormat("SCORE : %d", Points), 1100, 50, 20, GetTime() - LastPenalty > .25f ? WHITE : RED);
 }
 
 int getBonusPoints()

@@ -85,7 +85,6 @@ void updateGame()
 
 void renderGame()
 {
-    DrawText(TextFormat("SCORE : %d", getBonusPoints()), 1100, 50, 20, RAYWHITE);
     DrawText(TextFormat("TEMPS : %.1f s", Timer),1100,20,20, WHITE);
 
     renderMaze(maze);
