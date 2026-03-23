@@ -130,11 +130,11 @@ void renderGame()
     GetMazeCoordsFromScreenCoords(mouseX, mouseY, maze, &x, &y);
     int side = GetWallSideFromScreenCoords(mouseX, mouseY, maze);
 
-    if (isGameRunning && x != -1 && y != -1)
+    if (x != -1 && y != -1)
     {
         MazeNode node = getMazeNode(maze, x, y);
         if (node->walls & side) renderWall(maze, x, y, side, (Color){255, 0, 0, 122});
-        else renderWall(maze, x, y, side, WallAmount > 0 ? (Color){255, 255, 255, 122} : (Color){255, 0, 0, 122});
+        else renderWall(maze, x, y, side, (WallAmount > 0 && isGameRunning) ? (Color){255, 255, 255, 122} : (Color){255, 0, 0, 122});
     }
 }
 

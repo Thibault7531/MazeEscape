@@ -482,7 +482,6 @@ void renderMaze(Maze maze)
         }
     }
 
-    MazeNode startNode = getMazeNode(maze, maze->entryPointX, maze->entryPointY);
     switch (maze->entryPointSide)
     {
     case TOPWALL:
@@ -520,7 +519,6 @@ void renderMaze(Maze maze)
     default: break;
     }
 
-    MazeNode exitNode = getMazeNode(maze, maze->exitPointX, maze->exitPointY);
     switch (maze->exitPointSide)
     {
     case TOPWALL:
@@ -568,32 +566,32 @@ void renderWall(Maze maze, int x, int y, int side, Color color)
     {
     case TOPWALL:
         {
-            Vector2 lineStart = {startCoord.x + x * nodeSize, startCoord.y + y * nodeSize};
-            Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
+            Vector2 lineStart = {startCoord.x + x * nodeSize - lineThickness/2, startCoord.y + y * nodeSize};
+            Vector2 lineEnd = {lineStart.x + nodeSize + lineThickness, lineStart.y};
             DrawLineEx(lineStart, lineEnd, lineThickness, color);
             break;
         }
 
     case RIGHTWALL:
         {
-            Vector2 lineStart = {startCoord.x + (x+1) * nodeSize, startCoord.y + y * nodeSize};
-            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
+            Vector2 lineStart = {startCoord.x + (x+1) * nodeSize, startCoord.y + y * nodeSize - lineThickness/2};
+            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize + lineThickness};
             DrawLineEx(lineStart, lineEnd, lineThickness, color);
             break;
         }
 
     case BOTTOMWALL:
         {
-            Vector2 lineStart = {startCoord.x + x * nodeSize, startCoord.y + (y+1) * nodeSize};
-            Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
+            Vector2 lineStart = {startCoord.x + x * nodeSize - lineThickness/2, startCoord.y + (y+1) * nodeSize};
+            Vector2 lineEnd = {lineStart.x + nodeSize + lineThickness, lineStart.y};
             DrawLineEx(lineStart, lineEnd, lineThickness, color);
             break;
         }
 
     case LEFTWALL:
         {
-            Vector2 lineStart = {startCoord.x + x * nodeSize, startCoord.y + y * nodeSize};
-            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
+            Vector2 lineStart = {startCoord.x + x * nodeSize, startCoord.y + y * nodeSize - lineThickness/2};
+            Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize + lineThickness};
             DrawLineEx(lineStart, lineEnd, lineThickness, color);
             break;
         }
