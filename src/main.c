@@ -20,6 +20,7 @@ int main ()
 	SearchAndSetResourceDir("resources");
 
 	Music music = LoadMusicStream("musique_fond.wav");
+	Texture2D textureHerbe = LoadTexture("grass2.png");
 	PlayMusicStream(music);
 	music.looping=true;
 

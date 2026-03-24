@@ -470,7 +470,7 @@ void printMaze(Maze maze)
     }
 }
 
-void renderMaze(Maze maze)
+void renderMaze(Maze maze, Texture2D tex )
 {
     int nodeSize = 700 / maze->size;
     float lineThickness = .2f * nodeSize;
@@ -479,6 +479,7 @@ void renderMaze(Maze maze)
     {
         for (int x = 0; x < maze->size; x++)
         {
+            DrawTexturePro(tex, (Rectangle){0, 0, tex.width, tex.height}, (Rectangle){startCoord.x + x * nodeSize, startCoord.y + y * nodeSize, nodeSize, nodeSize}, (Vector2){0,0}, 0, WHITE);
             MazeNode node = getMazeNode(maze, x, y);
             if (isWallTop(node))
             {

@@ -112,12 +112,12 @@ void updateGame()
     }
 }
 
-void renderGame()
+void renderGame(Texture2D tex)
 {
     DrawText(TextFormat("TEMPS : %.1f s", Timer),1100,20,20, WHITE);
     DrawText(TextFormat("WALLS : %d", WallAmount),1100,100,20, WHITE);
 
-    renderMaze(maze);
+    renderMaze(maze,tex);
     renderBonuses(maze);
     renderScore();
 
