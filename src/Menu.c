@@ -21,9 +21,9 @@ void initMenu()
     MenuAI = createAI(aiX, aiY);
 }
 
-void renderMenu(Texture2D tex)
+void renderMenu()
 {
-    renderMaze(MenuMaze,tex);
+    renderMaze(MenuMaze);
     renderBonuses(MenuMaze);
     renderAI(MenuMaze, MenuAI);
 

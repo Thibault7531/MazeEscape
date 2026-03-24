@@ -7,8 +7,18 @@
 #include <stdlib.h>
 #include <time.h>
 
+Texture2D Grass;
+
 Maze createEmptyMaze(int size)
 {
+    if (!IsTextureValid(Grass))
+    {
+        Image image = LoadImage("GRASS+.png");
+        ImageCrop(&image, (Rectangle){8 * 16, 2 * 16, 16, 16});
+        Grass = LoadTextureFromImage(image);
+        UnloadImage(image);
+    }
+
     Maze maze = calloc(1, sizeof(struct Maze));
     maze->size = size;
     maze->nodes = calloc(size * size, sizeof(MazeNode*));
@@ -470,16 +480,24 @@ void printMaze(Maze maze)
     }
 }
 
-void renderMaze(Maze maze, Texture2D tex )
+void renderMaze(Maze maze)
 {
     int nodeSize = 700 / maze->size;
     float lineThickness = .2f * nodeSize;
     Vector2 startCoord = {290, 10};
+
     for (int y = 0; y < maze->size; y++)
     {
         for (int x = 0; x < maze->size; x++)
         {
-            DrawTexturePro(tex, (Rectangle){0, 0, tex.width, tex.height}, (Rectangle){startCoord.x + x * nodeSize, startCoord.y + y * nodeSize, nodeSize, nodeSize}, (Vector2){0,0}, 0, WHITE);
+            DrawTexturePro(Grass, (Rectangle){0, 0, Grass.width, Grass.height}, (Rectangle){startCoord.x + x * nodeSize, startCoord.y + y * nodeSize, nodeSize, nodeSize}, (Vector2){0,0}, 0, WHITE);
+        }
+    }
+
+    for (int y = 0; y < maze->size; y++)
+    {
+        for (int x = 0; x < maze->size; x++)
+        {
             MazeNode node = getMazeNode(maze, x, y);
             if (isWallTop(node))
             {

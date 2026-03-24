@@ -58,7 +58,7 @@ void setWallRight(MazeNode node, bool enable);
 void setWallBottom(MazeNode node, bool enable);
 
 void printMaze(Maze maze);
-void renderMaze(Maze maze,Texture2D tex);
+void renderMaze(Maze maze);
 void renderWall(Maze maze, int x, int y, int side, Color color);
 
 void GetMazeCoordsFromScreenCoords(int x, int y, Maze maze, int* xOut, int* yOut);
