@@ -482,7 +482,7 @@ void printMaze(Maze maze)
 
 void renderMaze(Maze maze)
 {
-    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    float nodeSize = (float)(GetRenderHeight() - 50) / maze->size;
     float lineThickness = .2f * nodeSize;
     float doorThickness = .1f * nodeSize;
     Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};

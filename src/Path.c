@@ -112,7 +112,7 @@ void renderPath(Maze maze, Path path)
     if (path.length == 0) return;
 
     Coord currentCoord = path.path[0];
-    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    float nodeSize = (float)(GetRenderHeight() - 50) / maze->size;
     float lineThickness = .2f * nodeSize;
     Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 

@@ -68,7 +68,7 @@ void updateBonuses(Maze maze, int positionX, int positionY, bool isAIStuck)
 
 void renderBonuses(Maze maze)
 {
-    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    float nodeSize = (float)(GetRenderHeight() - 50) / maze->size;
     Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
     float scale = 0.6f; // 0.6 = 60% de la case. Augmente à 0.8 pour plus gros.

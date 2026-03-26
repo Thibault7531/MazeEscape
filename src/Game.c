@@ -140,6 +140,26 @@ void renderGame()
         if (node->walls & side) renderWall(maze, x, y, side, (Color){255, 0, 0, 122});
         else renderWall(maze, x, y, side, (WallAmount > 0 && isGameRunning) ? (Color){255, 255, 255, 122} : (Color){255, 0, 0, 122});
     }
+
+    if (!isGameRunning)
+    {
+        int posX = GetRenderWidth() / 2 - MeasureText("GAME OVER", 50*renderScale) / 2;
+        int posY = GetRenderHeight() / 2 - 50*renderScale;
+        DrawText("GAME OVER", posX, posY, 50*renderScale, WHITE);
+
+        Rectangle buttonRect = (Rectangle){GetRenderWidth()/2 - 100*renderScale, GetRenderHeight()/2 + 50*renderScale, 200*renderScale, 50*renderScale};
+        bool buttonHovered = mouseX > buttonRect.x && mouseX < buttonRect.x + buttonRect.width && mouseY > buttonRect.y && mouseY < buttonRect.y + buttonRect.height;
+        DrawRectangleRounded(buttonRect, .25, 1, buttonHovered ? WHITE : DARKGRAY);
+        posX = GetRenderWidth()/2 - MeasureText("Rejouer", 40*renderScale) / 2;
+        DrawText("Rejouer", posX, buttonRect.y + 8*renderScale, 40*renderScale, buttonHovered ? BLACK : WHITE);
+        if (buttonHovered && IsMouseButtonDown(MOUSE_LEFT_BUTTON)) leftMouseDown = true;
+        if (buttonHovered && leftMouseDown && !IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+        {
+            initGame();
+            leftMouseDown = false;
+        }
+        if (leftMouseDown && !IsMouseButtonDown(MOUSE_LEFT_BUTTON)) leftMouseDown = false;
+    }
 }
 
 bool isRunning()

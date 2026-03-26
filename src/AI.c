@@ -96,7 +96,7 @@ bool isAIStuck(AI ai)
 
 void renderAI(Maze maze, AI ai)
 {
-    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    float nodeSize = (float)(GetRenderHeight() - 50) / maze->size;
     Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
     Vector2 pos = {startCoord.x + (ai->x + .12f) * nodeSize, startCoord.y + (ai->y + .12f) * nodeSize};
