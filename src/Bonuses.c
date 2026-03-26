@@ -96,8 +96,8 @@ void renderBonuses(Maze maze)
 void renderScore()
 {
     float renderScale = GetRenderHeight()/720.f;
-    int posX = GetRenderWidth() - MeasureText(TextFormat("SCORE : %d", Points), 20 * renderScale) - 10 * renderScale;
-    DrawText(TextFormat("SCORE : %d", Points), posX, 50 * renderScale, 20 * renderScale, GetTime() - LastPenalty > .25f ? WHITE : RED);
+    int posX = GetRenderWidth() - MeasureText(TextFormat("Score : %d", Points), 20 * renderScale) - 10 * renderScale;
+    DrawText(TextFormat("Score : %d", Points), posX, 50 * renderScale, 20 * renderScale, GetTime() - LastPenalty > .25f ? WHITE : RED);
 }
 
 int getBonusPoints()

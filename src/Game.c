@@ -119,10 +119,10 @@ void renderGame()
     renderScore();
 
     float renderScale = GetRenderHeight() / 720.f;
-    int posX = GetRenderWidth() - MeasureText(TextFormat("TEMPS : %.1f s", Timer), 20 * renderScale) - 10 * renderScale;
-    DrawText(TextFormat("TEMPS : %.1f s", Timer),posX,20 * renderScale,20 * renderScale, WHITE);
-    posX = GetRenderWidth() - MeasureText(TextFormat("WALLS : %d", WallAmount), 20 * renderScale) - 10 * renderScale;
-    DrawText(TextFormat("WALLS : %d", WallAmount),posX,100 * renderScale,20 * renderScale, WHITE);
+    int posX = GetRenderWidth() - MeasureText(TextFormat("Temps : %.1f s", Timer), 20 * renderScale) - 10 * renderScale;
+    DrawText(TextFormat("Temps : %.1f s", Timer),posX,20 * renderScale,20 * renderScale, WHITE);
+    posX = GetRenderWidth() - MeasureText(TextFormat("Murs : %d", WallAmount), 20 * renderScale) - 10 * renderScale;
+    DrawText(TextFormat("Murs : %d", WallAmount),posX,100 * renderScale,20 * renderScale, WHITE);
 
     renderPath(maze, path);
     renderAI(maze, ai);
