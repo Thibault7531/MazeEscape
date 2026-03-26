@@ -27,14 +27,22 @@ void renderMenu()
     renderBonuses(MenuMaze);
     renderAI(MenuMaze, MenuAI);
 
-    DrawText("Maze Escape", 442, 265, 60, WHITE);
+    float renderScale = GetRenderHeight() / 720.f;
+    int size = MeasureText("Maze Escape", 55 * renderScale);
+    float posX = GetRenderWidth()/2 - size/2;
+    float posY = 265 * renderScale;
+    DrawText("Maze Escape", posX, posY, 55 * renderScale, WHITE);
+
+    int sizeX = 150 * renderScale;
+    int sizeY = 60 * renderScale;
+    int sizeText = MeasureText("Jouer", 40 * renderScale);
+    Rectangle buttonRect = (Rectangle){GetRenderWidth()/2 - sizeX/2, 335 * renderScale, sizeX, sizeY};
 
     Vector2 mousePos = GetMousePosition();
-    bool buttonHovered = mousePos.x > 565 && mousePos.x < 715 && mousePos.y > 335 && mousePos.y < 400;
+    bool buttonHovered = mousePos.x > buttonRect.x && mousePos.x < buttonRect.x + buttonRect.width && mousePos.y > buttonRect.y && mousePos.y < buttonRect.y + buttonRect.height;
 
-    Rectangle buttonRect = (Rectangle){565, 335, 150, 60};
     DrawRectangleRounded(buttonRect, .25, 1, buttonHovered ? WHITE : DARKGRAY);
-    DrawText("Jouer", 580, 345, 40, buttonHovered ? BLACK : WHITE);
+    DrawText("Jouer", buttonRect.x + 15*renderScale, 345 * renderScale, 40 * renderScale, buttonHovered ? BLACK : WHITE);
 
     if (buttonHovered && IsMouseButtonDown(MOUSE_LEFT_BUTTON)) MouseClicked = true;
     if (MouseClicked && !IsMouseButtonDown(MOUSE_LEFT_BUTTON))

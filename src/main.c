@@ -13,7 +13,7 @@
 
 int main ()
 {
-	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
+	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE);
 	InitWindow(1280, 720, "MazeEscape");
 	InitAudioDevice();
 

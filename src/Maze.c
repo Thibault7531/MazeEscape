@@ -482,9 +482,10 @@ void printMaze(Maze maze)
 
 void renderMaze(Maze maze)
 {
-    int nodeSize = 700 / maze->size;
+    int nodeSize = (GetRenderHeight() - 50) / maze->size;
     float lineThickness = .2f * nodeSize;
-    Vector2 startCoord = {290, 10};
+    float doorThickness = .1f * nodeSize;
+    Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
     for (int y = 0; y < maze->size; y++)
     {
@@ -532,7 +533,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + maze->entryPointX * nodeSize, startCoord.y + maze->entryPointY * nodeSize};
             Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
-            DrawLineEx(lineStart, lineEnd, 5, BROWN);
+            DrawLineEx(lineStart, lineEnd, doorThickness, BROWN);
             break;
         }
 
@@ -540,7 +541,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + (maze->entryPointX+1) * nodeSize, startCoord.y + maze->entryPointY * nodeSize};
             Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
-            DrawLineEx(lineStart, lineEnd, 5, BROWN);
+            DrawLineEx(lineStart, lineEnd, doorThickness, BROWN);
             break;
         }
 
@@ -548,7 +549,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + maze->entryPointX * nodeSize, startCoord.y + (maze->entryPointY+1) * nodeSize};
             Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
-            DrawLineEx(lineStart, lineEnd, 5, BROWN);
+            DrawLineEx(lineStart, lineEnd, doorThickness, BROWN);
             break;
         }
 
@@ -556,7 +557,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + maze->entryPointX * nodeSize, startCoord.y + maze->entryPointY * nodeSize};
             Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
-            DrawLineEx(lineStart, lineEnd, 5, BROWN);
+            DrawLineEx(lineStart, lineEnd, doorThickness, BROWN);
             break;
         }
 
@@ -569,7 +570,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + maze->exitPointX * nodeSize, startCoord.y + maze->exitPointY * nodeSize};
             Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
-            DrawLineEx(lineStart, lineEnd, 5, RED);
+            DrawLineEx(lineStart, lineEnd, doorThickness, RED);
             break;
         }
 
@@ -577,7 +578,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + (maze->exitPointX+1) * nodeSize, startCoord.y + maze->exitPointY * nodeSize};
             Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
-            DrawLineEx(lineStart, lineEnd, 5, RED);
+            DrawLineEx(lineStart, lineEnd, doorThickness, RED);
             break;
         }
 
@@ -585,7 +586,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + maze->exitPointX * nodeSize, startCoord.y + (maze->exitPointY+1) * nodeSize};
             Vector2 lineEnd = {lineStart.x + nodeSize, lineStart.y};
-            DrawLineEx(lineStart, lineEnd, 5, RED);
+            DrawLineEx(lineStart, lineEnd, doorThickness, RED);
             break;
         }
 
@@ -593,7 +594,7 @@ void renderMaze(Maze maze)
         {
             Vector2 lineStart = {startCoord.x + maze->exitPointX * nodeSize, startCoord.y + maze->exitPointY * nodeSize};
             Vector2 lineEnd = {lineStart.x, lineStart.y + nodeSize};
-            DrawLineEx(lineStart, lineEnd, 5, RED);
+            DrawLineEx(lineStart, lineEnd, doorThickness, RED);
             break;
         }
     }
@@ -602,9 +603,9 @@ void renderMaze(Maze maze)
 
 void renderWall(Maze maze, int x, int y, int side, Color color)
 {
-    int nodeSize = 700 / maze->size;
+    int nodeSize = (GetRenderHeight() - 50) / maze->size;
     float lineThickness = .2f * nodeSize;
-    Vector2 startCoord = {290, 10};
+    Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
     switch (side)
     {
@@ -646,8 +647,8 @@ void renderWall(Maze maze, int x, int y, int side, Color color)
 
 void GetMazeCoordsFromScreenCoords(int x, int y, Maze maze, int* xOut, int* yOut)
 {
-    int nodeSize = 700 / maze->size;
-    Vector2 startCoord = {290, 10};
+    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
     *xOut = (x - startCoord.x) / nodeSize;
     *yOut = (y - startCoord.y) / nodeSize;
@@ -661,8 +662,8 @@ void GetMazeCoordsFromScreenCoords(int x, int y, Maze maze, int* xOut, int* yOut
 
 int GetWallSideFromScreenCoords(int x, int y, Maze maze)
 {
-    int nodeSize = 700 / maze->size;
-    Vector2 startCoord = {290, 10};
+    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
     int xOut = (x - startCoord.x) / nodeSize;
     int yOut = (y - startCoord.y) / nodeSize;

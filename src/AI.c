@@ -96,9 +96,9 @@ bool isAIStuck(AI ai)
 
 void renderAI(Maze maze, AI ai)
 {
-    Vector2 startCoord = {290, 10};
-    int nodeSize = 700 / maze->size;
+    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
-    Vector2 pos = {startCoord.x + ai->x * nodeSize + 8, startCoord.y + ai->y * nodeSize + 8};
-    DrawTextureEx(ai->texture, pos, 0, (nodeSize-16.f)/32, WHITE);
+    Vector2 pos = {startCoord.x + (ai->x + .12f) * nodeSize, startCoord.y + (ai->y + .12f) * nodeSize};
+    DrawTextureEx(ai->texture, pos, 0, (nodeSize*.76f)/32, WHITE);
 }
