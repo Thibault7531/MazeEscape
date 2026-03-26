@@ -38,6 +38,7 @@ int main ()
 
 		UpdateMusicStream(music);
 		updateGame();
+		if (inMenu) updateMenu();
 
 		BeginDrawing();
 		{

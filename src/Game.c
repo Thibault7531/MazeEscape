@@ -27,13 +27,13 @@ void initGame()
     Timer = 0;
 
     maze = createRandomMaze(10);
-    path = FindPathAStar(maze, getEntryPointX(maze), getEntryPointY(maze));
+    path = FindPathAStar(maze, getEntryPointX(maze), getEntryPointY(maze), getExitPointX(maze), getExitPointY(maze));
 
     while (path.length == 0)
     {
         destroyMaze(maze);
         maze = createRandomMaze(10);
-        path = FindPathAStar(maze, getEntryPointX(maze), getEntryPointY(maze));
+        path = FindPathAStar(maze, getEntryPointX(maze), getEntryPointY(maze), getExitPointX(maze), getExitPointY(maze));
     }
     ai = createAI(getEntryPointX(maze), getEntryPointY(maze));
     setPath(ai, path);
@@ -87,7 +87,7 @@ void updateGame()
             setNodeWall(maze, x, y, true, side);
             int nextX, nextY;
             getNextPosition(ai, &nextX, &nextY);
-            path = FindPathAStar(maze, nextX, nextY);
+            path = FindPathAStar(maze, nextX, nextY, getExitPointX(maze), getExitPointY(maze));
             setPath(ai, path);
             leftMouseDown = true;
             WallAmount--;
@@ -100,7 +100,7 @@ void updateGame()
             setNodeWall(maze, x, y, false, side);
             int nextX, nextY;
             getNextPosition(ai, &nextX, &nextY);
-            path = FindPathAStar(maze, nextX, nextY);
+            path = FindPathAStar(maze, nextX, nextY, getExitPointX(maze), getExitPointY(maze));
             setPath(ai, path);
             rightMouseDown = true;
             WallAmount++;
@@ -143,7 +143,7 @@ void renderGame()
 
     if (!isGameRunning)
     {
-        int posX = GetRenderWidth() / 2 - MeasureText("GAME OVER", 50*renderScale) / 2;
+        posX = GetRenderWidth() / 2 - MeasureText("GAME OVER", 50*renderScale) / 2;
         int posY = GetRenderHeight() / 2 - 50*renderScale;
         DrawText("GAME OVER", posX, posY, 50*renderScale, WHITE);
 

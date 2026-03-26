@@ -12,7 +12,7 @@ typedef struct
     Coord* path;
 } Path;
 
-Path FindPathAStar(Maze maze, int fromX, int fromY);
+Path FindPathAStar(Maze maze, int fromX, int fromY, int toX, int toY);
 
 void renderPath(Maze maze, Path path);
 

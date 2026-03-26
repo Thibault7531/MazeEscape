@@ -66,6 +66,19 @@ void updateBonuses(Maze maze, int positionX, int positionY, bool isAIStuck)
     }
 }
 
+void getRandomBonusPosition(Maze maze, int* x, int* y)
+{
+    int type = GetRandomValue(0, 1);
+    int number = GetRandomValue(0, BonusNumber - 1);
+    if (type == 0) {
+        *x = EggX[number];
+        *y = EggY[number];
+    } else {
+        *x = FlowerX[number];
+        *y = FlowerY[number];
+    }
+}
+
 void renderBonuses(Maze maze)
 {
     float nodeSize = (float)(GetRenderHeight() - 50) / maze->size;

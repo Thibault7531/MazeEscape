@@ -7,6 +7,9 @@
 
 Maze MenuMaze;
 AI MenuAI;
+Path MenuPath;
+
+int bonusX, bonusY;
 
 bool GameShouldStart = false;
 bool MouseClicked = false;
@@ -19,6 +22,28 @@ void initMenu()
     int aiX, aiY;
     getRandomPosition(MenuMaze, &aiX, &aiY);
     MenuAI = createAI(aiX, aiY);
+
+    getRandomBonusPosition(MenuMaze, &bonusX, &bonusY);
+    MenuPath = FindPathAStar(MenuMaze, aiX, aiY, bonusX, bonusY);
+    setPath(MenuAI, MenuPath);
+}
+
+void updateMenu()
+{
+    float deltaTime = GetFrameTime();
+
+    int aiX, aiY;
+    getCurrentPosition(MenuAI, &aiX, &aiY);
+
+    updateBonuses(MenuMaze, aiX, aiY, false);
+    updateAI(MenuMaze, MenuAI, deltaTime * 3);
+
+    if (MenuPath.length == 0 || (aiX == bonusX && aiY == bonusY))
+    {
+        getRandomBonusPosition(MenuMaze, &bonusX, &bonusY);
+        MenuPath = FindPathAStar(MenuMaze, aiX, aiY, bonusX, bonusY);
+        setPath(MenuAI, MenuPath);
+    }
 }
 
 void renderMenu()

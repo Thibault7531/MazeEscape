@@ -22,7 +22,7 @@ int distance(int x1, int y1, int x2, int y2)
     return abs(x1-x2)+abs(y1-y2);
 }
 
-Path FindPathAStar(Maze maze, int fromX, int fromY)
+Path FindPathAStar(Maze maze, int fromX, int fromY, int toX, int toY)
 {
     NodeIA* grid = malloc(sizeof(NodeIA) * getMazeSize(maze) * getMazeSize(maze));
     
@@ -55,7 +55,7 @@ Path FindPathAStar(Maze maze, int fromX, int fromY)
             free(grid);
             return (Path){0, NULL};
         } 
-        if(currentX==getExitPointX(maze) && currentY == getExitPointY(maze)){
+        if(currentX==toX && currentY == toY){
             break;
         }
 
@@ -80,7 +80,7 @@ Path FindPathAStar(Maze maze, int fromX, int fromY)
                         grid[nx+ny*getMazeSize(maze)].px = currentX;
                         grid[nx+ny*getMazeSize(maze)].py = currentY;
                         grid[nx+ny*getMazeSize(maze)].g = nouveauG;
-                        grid[nx+ny*getMazeSize(maze)].f =nouveauG+distance(nx, ny, getExitPointX(maze), getExitPointY(maze));
+                        grid[nx+ny*getMazeSize(maze)].f =nouveauG+distance(nx, ny, toX, toY);
                         grid[nx+ny*getMazeSize(maze)].ouvert = true;
                     }
                 }
@@ -89,11 +89,11 @@ Path FindPathAStar(Maze maze, int fromX, int fromY)
     }
 
     Path path = {0, NULL};
-    path.length = grid[getExitPointX(maze)+getExitPointY(maze)*getMazeSize(maze)].g + 1;
+    path.length = grid[toX+toY*getMazeSize(maze)].g + 1;
     path.path = malloc(sizeof(Coord) * path.length);
 
-    int tempX = getExitPointX(maze);
-    int tempY = getExitPointY(maze);
+    int tempX = toX;
+    int tempY = toY;
 
     for(int i = path.length - 1; i >= 0; i--) {
         path.path[i] = (Coord){tempX, tempY};
