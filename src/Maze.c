@@ -603,7 +603,7 @@ void renderMaze(Maze maze)
 
 void renderWall(Maze maze, int x, int y, int side, Color color)
 {
-    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    float nodeSize = (GetRenderHeight() - 50) / maze->size;
     float lineThickness = .2f * nodeSize;
     Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
@@ -647,7 +647,7 @@ void renderWall(Maze maze, int x, int y, int side, Color color)
 
 void GetMazeCoordsFromScreenCoords(int x, int y, Maze maze, int* xOut, int* yOut)
 {
-    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    float nodeSize = (GetRenderHeight() - 50) / maze->size;
     Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
     *xOut = (x - startCoord.x) / nodeSize;
@@ -662,7 +662,7 @@ void GetMazeCoordsFromScreenCoords(int x, int y, Maze maze, int* xOut, int* yOut
 
 int GetWallSideFromScreenCoords(int x, int y, Maze maze)
 {
-    int nodeSize = (GetRenderHeight() - 50) / maze->size;
+    float nodeSize = (GetRenderHeight() - 50) / maze->size;
     Vector2 startCoord = {GetRenderWidth()/2 - nodeSize*(maze->size/2.f), 25};
 
     int xOut = (x - startCoord.x) / nodeSize;

@@ -81,31 +81,34 @@ void updateGame()
         GetMazeCoordsFromScreenCoords(mouseX, mouseY, maze, &x, &y);
         int side = GetWallSideFromScreenCoords(mouseX, mouseY, maze);
 
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && !leftMouseDown && WallAmount > 0 && !(getNodeWalls(maze, x, y) & side))
+        if (x != -1 && y != -1 && side != -1)
         {
-            MazeNode node = getMazeNode(maze, x, y);
-            setNodeWall(maze, x, y, true, side);
-            int nextX, nextY;
-            getNextPosition(ai, &nextX, &nextY);
-            path = FindPathAStar(maze, nextX, nextY, getExitPointX(maze), getExitPointY(maze));
-            setPath(ai, path);
-            leftMouseDown = true;
-            WallAmount--;
-        }
-        if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) leftMouseDown = false;
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && !leftMouseDown && WallAmount > 0 && !(getNodeWalls(maze, x, y) & side))
+            {
+                MazeNode node = getMazeNode(maze, x, y);
+                setNodeWall(maze, x, y, true, side);
+                int nextX, nextY;
+                getNextPosition(ai, &nextX, &nextY);
+                path = FindPathAStar(maze, nextX, nextY, getExitPointX(maze), getExitPointY(maze));
+                setPath(ai, path);
+                leftMouseDown = true;
+                WallAmount--;
+            }
+            if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) leftMouseDown = false;
 
-        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && !rightMouseDown && (getNodeWalls(maze, x, y) & side))
-        {
-            MazeNode node = getMazeNode(maze, x, y);
-            setNodeWall(maze, x, y, false, side);
-            int nextX, nextY;
-            getNextPosition(ai, &nextX, &nextY);
-            path = FindPathAStar(maze, nextX, nextY, getExitPointX(maze), getExitPointY(maze));
-            setPath(ai, path);
-            rightMouseDown = true;
-            WallAmount++;
+            if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && !rightMouseDown && (getNodeWalls(maze, x, y) & side))
+            {
+                MazeNode node = getMazeNode(maze, x, y);
+                setNodeWall(maze, x, y, false, side);
+                int nextX, nextY;
+                getNextPosition(ai, &nextX, &nextY);
+                path = FindPathAStar(maze, nextX, nextY, getExitPointX(maze), getExitPointY(maze));
+                setPath(ai, path);
+                rightMouseDown = true;
+                WallAmount++;
+            }
+            if (!IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) rightMouseDown = false;
         }
-        if (!IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) rightMouseDown = false;
 
         getCurrentPosition(ai, &aiX, &aiY);
         if (aiX == getExitPointX(maze) && aiY == getExitPointY(maze)) isGameRunning = false;

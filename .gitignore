@@ -410,3 +410,7 @@ Makefile
 .idea
 raylib.Make
 MazeEscape.make
+/MazeEscape.vcxproj
+/MazeEscape.vcxproj.filters
+/raylib.vcxproj
+/raylib.vcxproj.filters
