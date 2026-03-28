@@ -10,6 +10,8 @@ AI createAI(int x, int y)
     AI ai = malloc(sizeof(struct AI));
     ai->x = x;
     ai->y = y;
+	ai->currentCoord.x = x;
+	ai->currentCoord.y = y;
     ai->texture = LoadTexture("wabbit_alpha.png");
     ai->moving = false;
     Path path;
