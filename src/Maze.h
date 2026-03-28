@@ -11,7 +11,7 @@
 
 struct MazeNode
 {
-    unsigned int walls;
+    char walls;
 };
 typedef struct MazeNode* MazeNode;
 
@@ -38,7 +38,7 @@ void addRandomWall(Maze maze);
 
 MazeNode getMazeNode(Maze maze, int x, int y);
 void setNodeWallsUnsafe(Maze maze, int x, int y, int node);
-int getNodeWalls(Maze maze, int x, int y);
+char getNodeWalls(Maze maze, int x, int y);
 void setNodeWall(Maze maze, int x, int y, bool enable, int wall);
 int getMazeSize(Maze maze);
 int getEntryPointX(Maze maze);

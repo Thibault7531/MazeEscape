@@ -290,7 +290,7 @@ void setNodeWallsUnsafe(Maze maze, int x, int y, int walls)
     maze->nodes[x+y*maze->size]->walls = walls;
 }
 
-int getNodeWalls(Maze maze, int x, int y)
+char getNodeWalls(Maze maze, int x, int y)
 {
     assert(x >= 0 && x < maze->size);
     assert(y >= 0 && y < maze->size);
